@@ -2,16 +2,41 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <title>Insert title here</title>
 </head>
 <body>
-	{%for q in questions %}
-	<div class="question">
-		<p><strong>{{q.text}}</strong></p>
-		{% for a in q.answers %}
-		<p>{{ a.text }}</p>
+	<div class="container">
+		<div class="row">
+			<div class="page-header"><h2>Random test example</h2></div>
+		</div>
+		<form class="form-horizontal">
+		{%for q in questions %}
+			<div class="form-group row">
+				<div id="question{{forloop.counter}}" class="question">
+					<div class="panel panel-primary">
+						<div class="panel-heading"><strong>{{forloop.counter}}. {{q.text}}</strong></div>
+						<div class="panel-body">
+						{% for a in q.alternative_set.all %}
+							<div class="radio">
+								<label><input type="radio" name="question{{forloop.parentloop.counter}}" value="{{a.id}}">{{ a.text }}</label>
+							</div>
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
 		{% endfor %}
+		</form>
+		<div class="row navbar-right">
+			<button class="btn btn-primary" type="button">Submit</button>
+			<button class="btn btn-warning" type="button">New random test</button>
+		</div>
 	</div>
-	{% endfor %}
 </body>
 </html>
