@@ -16,3 +16,4 @@ class QuestionForm(forms.ModelForm):
     
 class AlternativeInlineForm(forms.ModelForm):
     text = forms.CharField(widget=forms.Textarea(attrs={'rows':3, 'cols':100}))
+    
