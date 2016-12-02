@@ -10,4 +10,5 @@ from . import views
 
 urlpatterns = [
     url(r'^random_test/', views.random_test, name='random_test'),
+    url(r'^correct_questions/', views.correct_questions, name='correct_questions'),
 ]

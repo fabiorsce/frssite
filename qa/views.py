@@ -36,4 +36,22 @@ def random_test(request, number_of_questions=5):
             test_questions.append(questions[random.randrange(count)])
             i = i - 1
     
-    return render(request, template_name='random_test.html', context={'questions':test_questions})
+    return render(request, template_name='random_test.html', context={'number_of_questions':number_of_questions, 'questions':test_questions})
+
+from django.http import JsonResponse
+import json
+
+def correct_questions(request):
+    
+    data = json.loads(request.body.decode('utf-8'))
+    
+    print (data)
+    
+    response_data = []
+    
+    for q in data:
+        questionObj = Question.objects.filter(id=int(q['question']))
+        answerObj = Alternative.objects.filter(question=questionObj, is_answer=True)
+        response_data.append({'question': questionObj.id, 'user_answer':data['user_answer'], 'correct_answer':answerObj.id})
+    
+    return JsonResponse(response_data, safe=False)

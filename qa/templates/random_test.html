@@ -2,12 +2,81 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<script src="/static/js/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#id_btn_submit_test").click(function(){
+			
+			// Cleans the css of options
+			$(".alternative").removeClass("btn btn-success btn-danger");
+			
+			var number_of_questions = $("#id_number_of_questions").val();
+			data = [];
+			for (i=1;i<number_of_questions;i++) {
+				question_name = 'question'+i;
+				//console.log($("#"+question_name).attr('question-db-id'));
+				data.push({'question':$("#"+question_name).attr('question-db-id'), 'answer': $('input[name=' + question_name +']:checked', '#id_questions_form').val() });
+			}
+			//console.log(data);
+			
+			$.ajax({
+			    url: '/qa/correct_questions/',
+			    type: 'POST',
+			    contentType: 'application/json; charset=utf-8',
+			    data: JSON.stringify(data),
+			    dataType: 'text',
+			    success: function(result) {
+			        console.log(result);
+			    }
+			});
+			
+			//$(".alternative").addClass("btn btn-success");
+			
+			//$.post("demo_ajax_gethint.asp", {suggest: txt}, function(result){
+		    //   $("span").html(result);
+		    //});
+			
+			//$(selector).post(URL,data,function(data,status,xhr),dataType)
+		});
+	});
+</script>
 <title>Insert title here</title>
 </head>
 <body>
@@ -15,17 +84,21 @@
 		<div class="row">
 			<div class="page-header"><h2>Random test example</h2></div>
 		</div>
-		<form class="form-horizontal" method="post">
+		<div id="id_questions_form" class="form-horizontal">
+		<input id="id_number_of_questions" type="hidden" value="{{number_of_questions}}">
 		{% csrf_token %}
 		{%for q in questions %}
 			<div class="form-group row">
-				<div id="question{{forloop.counter}}" class="question">
+				<div id="question{{forloop.counter}}" class="question" question-db-id="{{q.id}}">
 					<div class="panel panel-primary">
 						<div class="panel-heading"><strong>{{forloop.counter}}. {{q.text}}</strong></div>
 						<div class="panel-body">
 						{% for a in q.alternative_set.all %}
 							<div class="radio">
-								<label><input type="radio" name="question{{forloop.parentloop.counter}}" value="{{a.id}}" {% if a.id in selected_alternatives %} checked="checked" {% endif %} >{{ a.text }}</label>
+								<label class="alternative">
+									<input id="radio{{forloop.parentloop.counter}}-{{forloop.counter}}" type="radio" name="question{{forloop.parentloop.counter}}" value="{{a.id}}">
+									{{ a.text }}
+								</label>
 							</div>
 						{% endfor %}
 						</div>
@@ -34,10 +107,10 @@
 			</div>
 		{% endfor %}
 		<div class="navbar navbar-right">
-			<button class="btn btn-primary" type="submit">Submit</button>
+			<button id="id_btn_submit_test" class="btn btn-primary" type="submit">Submit</button>
 			<button class="btn btn-warning" type="button">New random test</button>
 		</div>
-		</form>
+		</div>
 	</div>
 </body>
 </html>
