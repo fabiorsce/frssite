@@ -10,5 +10,5 @@ from .models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display=['photo', 'text', 'price' ]
+    list_display=['id', 'photo', 'text', 'price' ]
     

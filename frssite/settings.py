@@ -107,3 +107,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = '/'.join((PROJECT_ROOT,'static/'))
+
+MEDIA_ROOT = '/'.join((PROJECT_ROOT,'media/'))
+
+MEDIA_URL = '/media/'
