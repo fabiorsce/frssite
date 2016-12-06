@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'frssite',
     'qa',
+    'mr',
 )
 
 MIDDLEWARE_CLASSES = (
