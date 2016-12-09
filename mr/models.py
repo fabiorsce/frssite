@@ -27,20 +27,32 @@ class Product(models.Model):
 
 class Request(models.Model):
     
+    WAITING = 'waiting'
     QUEUE = 'queue'
     PREPARING = 'preparing'
     DONE = 'done'
-    STATUS_CHOICES = ( (QUEUE, 'Queue'),
+    STATUS_CHOICES = ( 
+                       (WAITING, 'Waiting Payment'),
+                       (QUEUE, 'Queue'),
                        (PREPARING, 'Preparing'),
                        (DONE, 'Done'),
                     )
     
     name = models.CharField(max_length=50, null=False, blank=False)
-    status = models.CharField(max_length=50, null=False, blank=False, choices=STATUS_CHOICES, default=QUEUE)
+    status = models.CharField(max_length=50, null=False, blank=False, choices=STATUS_CHOICES, default=WAITING)
     created = models.DateTimeField(null=False, blank=False, auto_now_add=True)
     
     def __str__(self):
         return self.product.text
+    
+    def getTotalValue(self):
+        
+        total_value = 0.0
+        items = self.item_set()
+        for i in items:
+            total_value = total_value + (i.product.price * i.quantity) 
+            
+        return total_value
 
     
 class Item(models.Model):

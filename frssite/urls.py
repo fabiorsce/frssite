@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^home/', views.index),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^qa/', include('qa.urls')),
+    url(r'^mr/', include('mr.urls')),
 ]
 
 if settings.DEBUG:
