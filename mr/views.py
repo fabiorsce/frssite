@@ -9,6 +9,7 @@ from django.http import JsonResponse
 import json
 from django.contrib import messages
 from .models import Request
+from mr.models import Product
 
 def food_request(request):
     
@@ -19,6 +20,9 @@ def food_request(request):
 
 def make_request(request):
     
+    dishes = Product.objects.filter(category=Product.DISH)
+    beverages = Product.objects.filter(category=Product.BEVERAGE)
+    desserts =  Product.objects.filter(category=Product.DESSERT)
     
     
     return render(request, template_name='make_request.html', context=locals())

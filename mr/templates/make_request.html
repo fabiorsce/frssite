@@ -2,93 +2,170 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="5" >
 <script src="/static/js/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	crossorigin="anonymous">
 <!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	crossorigin="anonymous">
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	crossorigin="anonymous"></script>
 
 <script type="text/javascript">
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
+	function getCookie(name) {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != '') {
+			var cookies = document.cookie.split(';');
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				// Does this cookie string begin with the name we want?
+				if (cookie.substring(0, name.length + 1) == (name + '=')) {
+					cookieValue = decodeURIComponent(cookie
+							.substring(name.length + 1));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+	var csrftoken = getCookie('csrftoken');
 
-function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
+	function csrfSafeMethod(method) {
+		// these HTTP methods do not require CSRF protection
+		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+	$.ajaxSetup({
+		beforeSend : function(xhr, settings) {
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		}
+	});
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {
-		
+
 		$('#id_messages').hide();
 
 	});
 </script>
+
+<style type="text/css">
+.thumbnail img {
+	height: 200px;
+	width: 100%;
+}
+</style>
+
 <title>Express Food Request</title>
 </head>
 <body>
 	<div class="container">
-	<form>
-		<div class="row">
-			<div class="page-header">
-				<h2>Add a food request</h2>
-			</div>
-		</div>
-		{% if messages %}
-		<div class="row">
-		    {% for message in messages %}
-		    <div {% if message.tags %} class="alert {% if message.tags == 'error' %}alert-danger {% else %} alert-{{ message.tags }} {% endif %}"{% endif %} >{{ message }}</div>
-		    {% endfor %}
-		</div>
-		{% endif %}
-		<div class="row">
-			<div id="id_messages">
-			</div>
-		</div>
-		<div id="id_requests">
-			<input type="hidden" id="id_items_count" value="0">
+		<form>
 			<div class="row">
-				<label for="name">Name: </label>
-				<input type="text" name="name" id="id_name">
+				<div class="page-header">
+					<h2>Make your request</h2>
+				</div>
 			</div>
-			<div id="id_items" class="row">
-				{% for i in items %}
+			{% if messages %}
+			<div class="row">
+				{% for message in messages %}
+					<div {% if message.tags %} class="alert {% if message.tags == 'error' %}alert-danger {% else %} alert-{{ message.tags }} {% endif %}"{% endif %} >{{message }}</div>
 				{% endfor %}
 			</div>
-		
-		</div>
-		
-		<div class="row">
-			<div class="navbar pull-right">
-				<a id="id_btn_make_request" class="btn btn-primary" href="{% url 'make_request' %}" >Make a request</a>
+			{% endif %}
+			<div class="row">
+				<div id="id_messages"></div>
 			</div>
-		</div>
-		
-	</form>	
+
+
+
+			<div id="id_requests">
+				<div class="row">
+					<label for="name">Name: </label> <input type="text" name="name"	id="id_name">
+				</div>
+
+				<ul class="nav nav-pills nav-justified">
+					<li role="presentation" class="active"><a data-toggle="pill"
+						href="#tab_dishes">Dishes</a></li>
+					<li role="presentation"><a data-toggle="pill"
+						href="#tab_beverages">Beverages</a></li>
+					<li role="presentation"><a data-toggle="pill"
+						href="#tab_desserts">Desserts</a></li>
+				</ul>
+
+
+				<div class="tab-content">
+					<div id="tab_dishes" class="tab-pane fade in active">
+						<div class="row">
+							{% for d in dishes %}
+							<div class="col-sm-6 col-md-4">
+								<div id="{{d.id}}" class="thumbnail">
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
+										width="150">
+									<div class="caption">
+										<p>{{d.text}}</p>
+										<div class="text-center">
+										<div class="btn-group" role="group" >
+										  <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div id="tab_beverages" class="tab-pane fade">
+						<div class="row">
+							{% for d in beverages %}
+							<div class="col-sm-6 col-md-4">
+								<div id="{{d.id}}" class="thumbnail">
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
+										width="150">
+									<div class="caption">
+										<p>{{d.text}}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div id="tab_desserts" class="tab-pane fade">
+						<div class="row">
+							{% for d in desserts %}
+							<div class="col-sm-6 col-md-4">
+								<div id="{{d.id}}" class="thumbnail">
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
+										width="150">
+									<div class="caption">
+										<p>{{d.text}}</p>
+									</div>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="navbar pull-right">
+					<a id="id_btn_make_request" class="btn btn-primary"
+						href="{% url 'make_request' %}">Make a request</a>
+				</div>
+			</div>
+
+		</form>
 	</div>
 </body>
 </html>
