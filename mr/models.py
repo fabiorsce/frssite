@@ -5,6 +5,7 @@ Created on 6 de dez de 2016
 '''
 
 from django.db import models
+from decimal import Decimal
 
 class Product(models.Model):
     
@@ -28,32 +29,47 @@ class Product(models.Model):
 
 class Request(models.Model):
     
-    WAITING = 'waiting'
-    QUEUE = 'queue'
-    PREPARING = 'preparing'
-    DONE = 'done'
+    WAITING = '1waiting'
+    PAID = '2paid'
+    PREPARING = '3preparing'
+    DONE = '4done'
     STATUS_CHOICES = ( 
                        (WAITING, 'Waiting Payment'),
-                       (QUEUE, 'Queue'),
+                       (PAID, 'Paid'),
                        (PREPARING, 'Preparing'),
                        (DONE, 'Done'),
                     )
     
     name = models.CharField(max_length=50, null=False, blank=False)
     status = models.CharField(max_length=50, null=False, blank=False, choices=STATUS_CHOICES, default=WAITING)
+    total = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     created = models.DateTimeField(null=False, blank=False, auto_now_add=True)
+    paid = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.product.text
+        return self.name
     
     def getTotalValue(self):
         
-        total_value = 0.0
-        items = self.item_set()
+        total_value = Decimal.from_float(0.0)
+        items = self.item_set.all()
         for i in items:
             total_value = total_value + (i.product.price * i.quantity) 
             
         return total_value
+    
+     
+    def getStatusStyle(self):
+        if self.status == self.WAITING:
+            return 'danger'
+        elif self.status == self.PAID:
+            return 'info'
+        elif self.status == self.PREPARING:
+            return 'warning'
+        elif self.status == self.DONE:
+            return 'success'
+        
+        return 'danger'
 
     
 class Item(models.Model):

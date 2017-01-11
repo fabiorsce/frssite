@@ -65,11 +65,11 @@ $.ajaxSetup({
 		</div>
 		
 		<div class="row">
-			<ul class="nav nav-pills">
-	  			<li role="presentation" class="active"><a href="{% url 'food_request' %}">Client View</a></li>
-			  	<li role="presentation"><a href="{% url 'food_request_cashier_view' %}">Cashier View</a></li>
-			  	<li role="presentation"><a href="{% url 'food_request_kitchen_view' %}">Kitchen View</a></li>
-			</ul>
+		<ul class="nav nav-pills">
+  			<li role="presentation"><a href="{% url 'food_request' %}">Client View</a></li>
+		  	<li role="presentation"><a href="{% url 'food_request_cashier_view' %}">Cashier View</a></li>
+		  	<li role="presentation" class="active"><a href="{% url 'food_request_kitchen_view' %}">Kitchen View</a></li>
+		</ul>
 		</div>
 		
 		{% if messages %}
@@ -92,6 +92,7 @@ $.ajaxSetup({
 						<th>Total</th>
 						<th>Status</th>
 						<th>Date</th>
+						<th>Action</th>
 					<tr>
 				</thead>
 				<tbody>
@@ -110,19 +111,21 @@ $.ajaxSetup({
 						</td>
 						<td>{{r.get_status_display}}</td>
 						<td>{% if r.paid %}{{r.paid}}{% endif %}</td>
+						<td>{% if r.status == r.PAID %}
+								<a class="btn btn-info btn-lg" href="{% url 'change_to_preparing' food_request_id=r.id %}">
+  									<span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+								</a>
+							{% else %}
+								<a class="btn btn-warning btn-lg" href="{% url 'change_to_done' food_request_id=r.id %}">
+  									<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+								</a> 
+							{% endif %}
+						</td>	
 					</tr>
 					{% endfor %}
 				</tbody>
 			</table>
 		</div>		
-		
-		<div class="row">
-			<div class="navbar pull-right">
-				<a id="id_btn_make_request" class="btn btn-primary" href="{% url 'make_request' %}" >Make a request</a>
-			</div>
-		</div>
-		
-		
 	</div>
 </body>
 </html>

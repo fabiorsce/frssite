@@ -92,7 +92,7 @@ function loadFoodRequestToTable() {
 		row += "<td>" + obj.items[i].id + "</td>";
 		row += "<td>" + obj.items[i].title + "</td>";
 		row += "<td>" + obj.items[i].quantity + "</td>";
-		row += "<td>" + obj.items[i].price + "</td>";
+		row += '<td class="text-right">' + (parseFloat(obj.items[i].price)).toFixed( 2 ) + "</td>";
 		row += "</tr>";
 		$("#table_food_request tbody").append(row);
 		
@@ -117,6 +117,7 @@ function addProduct(productId) {
 		obj.items.push(newItem);
 	}
 	
+	obj.total = (parseFloat(obj.total) + parseFloat(productObj.attr("price"))).toFixed( 2 );
 	myJsonFoodRequest = JSON.stringify(obj);
 	localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
 	
@@ -137,6 +138,7 @@ function delProduct(productId) {
 				obj.items[i].quantity = obj.items[i].quantity - 1;
 				obj.items[i].price = (parseFloat(obj.items[i].price) - parseFloat(productObj.attr("price"))).toFixed( 2 );	
 			}
+			obj.total = (parseFloat(obj.total) - parseFloat(productObj.attr("price"))).toFixed( 2 );
 		}	
 	}
 	
@@ -218,11 +220,7 @@ function sendFoodRequest() {
 
 
 			<div id="id_requests">
-				<div class="row">
-					<label for="name">Name: </label> <input type="text" name="name"	id="id_name">
-				</div>
-
-				<ul class="nav nav-pills nav-justified">
+				<ul class="nav nav-tabs">
 					<li role="presentation" class="active"><a data-toggle="pill"
 						href="#tab_dishes">Dishes</a></li>
 					<li role="presentation"><a data-toggle="pill"
@@ -238,14 +236,15 @@ function sendFoodRequest() {
 							{% for d in dishes %}
 							<div class="col-sm-6 col-md-4">
 								<div id="product_{{d.id}}" class="thumbnail" title="{{d.title}}" price="{{d.price}}">
-									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="242"
 										width="150">
 									<div class="caption">
 										<div class="text-center">
-										<h3>{{d.text}}</h3>
+										<h3>{{d.title}}</h3>
+										<p>{{d.text}}</p>
 										<div class="btn-group" role="group" >
-										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-success btn-lg" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger btn-lg"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 										</div>
 										</div>
 									</div>
@@ -262,10 +261,11 @@ function sendFoodRequest() {
 									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150" width="150">
 									<div class="caption">
 										<div class="text-center">
-										<h3>{{d.text}}</h3>
+										<h3>{{d.title}}</h3>
+										<p>{{d.text}}</p>
 										<div class="btn-group" role="group" >
-										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-success btn-lg" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger btn-lg"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 										</div>
 										</div>
 									</div>
@@ -282,10 +282,11 @@ function sendFoodRequest() {
 									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150" width="150">
 									<div class="caption">
 										<div class="text-center">
-										<h3>{{d.text}}</h3>
+										<h3>{{d.title}}</h3>
+										<p>{{d.text}}</p>
 										<div class="btn-group" role="group" >
-										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-success btn-lg" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger btn-lg"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 										</div>
 										</div>
 									</div>
@@ -301,10 +302,10 @@ function sendFoodRequest() {
 				<table id="table_food_request" class="table">
 					<thead>
 						<tr>
-							<th>id</th>
-							<th>product</th>
-							<th>quantity</th>
-							<th>price</th>	
+							<th>Id</th>
+							<th>Product</th>
+							<th>Quantity</th>
+							<th class="text-right">Price</th>	
 						</tr>
 					</thead>
 					<tbody>
@@ -314,13 +315,25 @@ function sendFoodRequest() {
 				</table>
 			</div>
 
-			<div class="row">
-				<div class="navbar pull-right">
-					<button id="id_btn_make_request" class="btn btn-primary" onclick="sendFoodRequest()">Make a request</button>
+		<nav class="navbar navbar-default">
+			<div class="container-fluid">
+				<div class="navbar-header pull-left">
+					<div class="navbar-form">
+						<label for="name">Name: </label>
+						<input class="form-control" type="text" name="name"	id="id_name">
+					</div>
+				</div>
+
+				<div class="navbar-header pull-right">
+					<div class="navbar-form">
+						<button id="id_btn_make_request" class="btn btn-primary" onclick="sendFoodRequest()">Make a request</button>
+					</div>
 				</div>
 			</div>
+		</nav>
 
-		
+
+
 	</div>
 </body>
 </html>
