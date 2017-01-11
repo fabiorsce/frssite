@@ -1,0 +1,5 @@
+No make request, colocar uma tabela hidden com os ids e quantidades. Quando o usuario clicar em + ou -, alterar essa tabela para montar o objeto json do request.
+
+Estudar o AngularJS para que quando o usuário clicar em + ou -, alterar o objeto json e alterar a tabela com o resumo do pedido, por exemplo, item, quantidade, valor e total.
+
+

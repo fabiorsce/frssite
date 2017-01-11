@@ -11,4 +11,6 @@ from . import views
 urlpatterns = [
     url(r'^food_request/', views.food_request, name='food_request'),
     url(r'^make_request/', views.make_request, name='make_request'),
+    url(r'^add_request/', views.add_request, name='add_request'),
+    
 ]

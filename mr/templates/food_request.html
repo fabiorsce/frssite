@@ -75,6 +75,7 @@ $.ajaxSetup({
 				<thead>
 					<tr>
 						<th>Name</th>
+						<th>Items</th>
 						<th>Status</th>
 						<th>Date</th>
 					<tr>
@@ -82,9 +83,16 @@ $.ajaxSetup({
 				<tbody>
 					{% for r in food_requests %}
 					<tr>
-						<td>r.name</td>
-						<td>r.status</td>
-						<td>r.created_at</td>
+						<td>{{r.name}}</td>
+						<td>
+							<p>
+							{% for i in r.item_set.all %}
+								{{i.product.title}} <span class="badge"> {{ i.quantity }}</span>
+							{% endfor %}
+							</p>
+						</td>
+						<td>{{r.status}}</td>
+						<td>{{r.created}}</td>
 					</tr>
 					{% endfor %}
 				</tbody>
@@ -98,8 +106,6 @@ $.ajaxSetup({
 		</div>
 		
 		
-		</div>
-	</div> -->
 	</div>
 </body>
 </html>

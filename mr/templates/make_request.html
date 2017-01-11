@@ -18,6 +18,25 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	crossorigin="anonymous"></script>
+	
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js">
+	
+<script type="text/javascript">
+(function() {
+	 'use strict';
+	 angular.module('app',[
+		'ngCookies'
+	 ], function($interpolateProvider){
+		// Contorna prroblema de interpolação da renderização de template do django
+		$interpolateProvider.startSymbol('{[{');
+		$interpolateProvider.endSymbol('}]}');
+	 })
+	 .run( function run($http, $cookies ){
+		// Evita problemas relacionados ao CSRF
+		$http.defaults.headers.post['X-CSRFToken'] = $cookies['csrftoken'];
+	 });
+	})();
+</script>
 
 <script type="text/javascript">
 	function getCookie(name) {
@@ -54,8 +73,118 @@
 	$(document).ready(function() {
 
 		$('#id_messages').hide();
+		myFoodRequest = {"name": "", "items": [], "total":0}
+		myJsonFoodRequest = JSON.stringify(myFoodRequest);
+		localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
+		
+		loadFoodRequestToTable();
 
 	});
+</script>
+<script type="text/javascript">
+function loadFoodRequestToTable() {
+	text = localStorage.getItem("myJsonFoodRequest");
+	obj = JSON.parse(text);
+	//console.log(obj.items[0].id);
+	$('#table_food_request tbody').empty();
+	for (i=0;i < obj.items.length; i++) {
+		row = "<tr>";
+		row += "<td>" + obj.items[i].id + "</td>";
+		row += "<td>" + obj.items[i].title + "</td>";
+		row += "<td>" + obj.items[i].quantity + "</td>";
+		row += "<td>" + obj.items[i].price + "</td>";
+		row += "</tr>";
+		$("#table_food_request tbody").append(row);
+		
+	}
+}
+function addProduct(productId) {
+	
+	text = localStorage.getItem("myJsonFoodRequest");
+	obj = JSON.parse(text);
+	productObj = $("#product_"+productId);
+	
+	isPresent = false;
+	for (i=0;i < obj.items.length; i++) {
+		if (obj.items[i].id == productId) {
+			isPresent = true;
+			obj.items[i].quantity = obj.items[i].quantity + 1;
+			obj.items[i].price = (parseFloat(obj.items[i].price) + parseFloat(productObj.attr("price"))).toFixed( 2 );
+		}	
+	}
+	if (! isPresent ) {
+		newItem = {"id":productId, "title":productObj.attr( "title" ), "quantity":1, "price": parseFloat(productObj.attr("price")) };
+		obj.items.push(newItem);
+	}
+	
+	myJsonFoodRequest = JSON.stringify(obj);
+	localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
+	
+	loadFoodRequestToTable();
+
+}
+
+function delProduct(productId) {
+	text = localStorage.getItem("myJsonFoodRequest");
+	obj = JSON.parse(text);
+	productObj = $("#product_"+productId);
+	
+	for (i=0;i < obj.items.length; i++) {
+		if (obj.items[i].id == productId) {
+			if (obj.items[i].quantity == 1) {
+				obj.items.splice(i, 1);
+			} else {
+				obj.items[i].quantity = obj.items[i].quantity - 1;
+				obj.items[i].price = (parseFloat(obj.items[i].price) - parseFloat(productObj.attr("price"))).toFixed( 2 );	
+			}
+		}	
+	}
+	
+	myJsonFoodRequest = JSON.stringify(obj);
+	localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
+	
+	loadFoodRequestToTable();
+}
+
+function validateFoodRequest() {
+	var messages = '';
+	var isValid = true;
+	console.log($("#id_name").val());
+	if ($("#id_name").val() == '' || $("#id_name").val() == null ) {
+		messages = messages + '<div class="alert alert-danger">You must inform a name </div>';
+		isValid = false;
+	} else {
+		text = localStorage.getItem("myJsonFoodRequest");
+		obj = JSON.parse(text);
+		obj.name = $("#id_name").val();
+		myJsonFoodRequest = JSON.stringify(obj);
+		localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
+	}
+	$("#id_messages").html(messages);
+	$("#id_messages").show();
+	return isValid;
+}
+
+function sendFoodRequest() {
+	if (validateFoodRequest()) {
+		
+		text = localStorage.getItem("myJsonFoodRequest");
+		obj = JSON.parse(text);
+		
+		$.ajax({
+		    url: '/mr/add_request/',
+		    type: 'POST',
+		    contentType: 'application/json; charset=utf-8',
+		    data: JSON.stringify(obj),
+		    dataType: 'text',
+		    success: function(text_result) {
+		    	alert('Your request is in queue');
+		    	window.location='/mr/food_request/';
+		    }
+		});
+		
+	}
+}
 </script>
 
 <style type="text/css">
@@ -69,7 +198,7 @@
 </head>
 <body>
 	<div class="container">
-		<form>
+		
 			<div class="row">
 				<div class="page-header">
 					<h2>Make your request</h2>
@@ -108,15 +237,15 @@
 						<div class="row">
 							{% for d in dishes %}
 							<div class="col-sm-6 col-md-4">
-								<div id="{{d.id}}" class="thumbnail">
+								<div id="product_{{d.id}}" class="thumbnail" title="{{d.title}}" price="{{d.price}}">
 									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
 										width="150">
 									<div class="caption">
-										<p>{{d.text}}</p>
 										<div class="text-center">
+										<h3>{{d.text}}</h3>
 										<div class="btn-group" role="group" >
-										  <button type="button" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-										  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 										</div>
 										</div>
 									</div>
@@ -129,11 +258,16 @@
 						<div class="row">
 							{% for d in beverages %}
 							<div class="col-sm-6 col-md-4">
-								<div id="{{d.id}}" class="thumbnail">
-									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
-										width="150">
+								<div id="product_{{d.id}}" class="thumbnail" title="{{d.title}}" price="{{d.price}}">
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150" width="150">
 									<div class="caption">
-										<p>{{d.text}}</p>
+										<div class="text-center">
+										<h3>{{d.text}}</h3>
+										<div class="btn-group" role="group" >
+										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -144,11 +278,16 @@
 						<div class="row">
 							{% for d in desserts %}
 							<div class="col-sm-6 col-md-4">
-								<div id="{{d.id}}" class="thumbnail">
-									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150"
-										width="150">
+								<div id="product_{{d.id}}" class="thumbnail" title="{{d.title}}" price="{{d.price}}">
+									<img src="{{d.photo.url}}" alt="{{d.text}}" height="150" width="150">
 									<div class="caption">
-										<p>{{d.text}}</p>
+										<div class="text-center">
+										<h3>{{d.text}}</h3>
+										<div class="btn-group" role="group" >
+										  <button type="button" class="btn btn-success" onclick="addProduct({{d.id}})" ><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+										  <button type="button" class="btn btn-danger"  onclick="delProduct({{d.id}}) "><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+										</div>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -157,15 +296,31 @@
 					</div>
 				</div>
 			</div>
+			
+			<div>
+				<table id="table_food_request" class="table">
+					<thead>
+						<tr>
+							<th>id</th>
+							<th>product</th>
+							<th>quantity</th>
+							<th>price</th>	
+						</tr>
+					</thead>
+					<tbody>
+					
+					</tbody>
+					
+				</table>
+			</div>
 
 			<div class="row">
 				<div class="navbar pull-right">
-					<a id="id_btn_make_request" class="btn btn-primary"
-						href="{% url 'make_request' %}">Make a request</a>
+					<button id="id_btn_make_request" class="btn btn-primary" onclick="sendFoodRequest()">Make a request</button>
 				</div>
 			</div>
 
-		</form>
+		
 	</div>
 </body>
 </html>

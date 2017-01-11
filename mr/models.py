@@ -19,11 +19,12 @@ class Product(models.Model):
     
     category = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default=BEVERAGE, null=False, blank=False)
     photo = models.ImageField(null=False, blank=False, upload_to='product_images')
+    title = models.CharField(max_length=40, null=False, blank=False)
     text = models.CharField(max_length=200, null=False, blank=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=False, blank=False)
     
     def __str__(self):
-        return self.text
+        return self.title
 
 class Request(models.Model):
     
