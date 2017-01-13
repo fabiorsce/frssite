@@ -9,6 +9,7 @@ from django.contrib import admin
 from . import views
 
 urlpatterns = [
+    url(r'$^', views.food_request, name='food_request'),
     url(r'^food_request/', views.food_request, name='food_request'),
     url(r'^food_request_kitchen_view/', views.food_request_kitchen_view, name='food_request_kitchen_view'),
     url(r'^food_request_cashier_view/', views.food_request_cashier_view, name='food_request_cashier_view'),

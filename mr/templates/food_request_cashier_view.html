@@ -112,14 +112,21 @@ $.ajaxSetup({
 						</td>
 						<td>{{r.get_status_display}}</td>
 						<td>{% if r.paid %}{{r.paid}}{% endif %}</td>
-						<td>{% if r.status == r.WAITING %}
+						<td>
+							
+							{% if r.status == r.WAITING %}
 								<a class="btn btn-info btn-lg" href="{% url 'change_to_paid' food_request_id=r.id %}">
+  									<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
+								</a>
+							{% else %}
+								<a class="btn btn-info btn-lg disabled" href="{% url 'change_to_paid' food_request_id=r.id %}">
   									<span class="glyphicon glyphicon-usd" aria-hidden="true"></span>
 								</a>
 							{% endif %}
 							<a class="btn btn-danger btn-lg" href="{% url 'cancel_food_request' food_request_id=r.id %}">
   								<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 							</a>
+							
 						</td>	
 					</tr>
 					{% endfor %}
