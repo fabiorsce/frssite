@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="/static/js/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
@@ -153,7 +154,7 @@ function validateFoodRequest() {
 	var isValid = true;
 	console.log($("#id_name").val());
 	if ($("#id_name").val() == '' || $("#id_name").val() == null ) {
-		messages = messages + '<div class="alert alert-danger">You must inform a name </div>';
+		messages = messages + '<div class="alert alert-danger">You must inform a name.</div>';
 		isValid = false;
 	} else {
 		text = localStorage.getItem("myJsonFoodRequest");
@@ -162,8 +163,18 @@ function validateFoodRequest() {
 		myJsonFoodRequest = JSON.stringify(obj);
 		localStorage.setItem("myJsonFoodRequest", myJsonFoodRequest);
 	}
-	$("#id_messages").html(messages);
-	$("#id_messages").show();
+	
+	text = localStorage.getItem("myJsonFoodRequest");
+	obj = JSON.parse(text);
+	if (obj.items.length == 0) {
+		messages = messages + '<div class="alert alert-danger">You must choose at least one item in your request.</div>';
+		isValid = false;
+	}
+	
+	if (! isValid ) {
+		$("#id_messages").html(messages);
+		$("#id_messages").show();
+	}
 	return isValid;
 }
 
@@ -315,25 +326,16 @@ function sendFoodRequest() {
 				</table>
 			</div>
 
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header pull-left">
-					<div class="navbar-form">
-						<label for="name">Name: </label>
-						<input class="form-control" type="text" name="name"	id="id_name">
-					</div>
+		<div class="navbar-form navbar-right" role="search">
+				<div class="input-group">
+						{% csrf_token %}
+						<input class="form-control input-lg" type="text" name="name"	id="id_name" placeholder="Enter your name">
+						<span class="input-group-btn">
+							<button id="id_btn_make_request" class="btn-lg btn-primary" onclick="sendFoodRequest()">Make a request</button>
+						</span>
 				</div>
-
-				<div class="navbar-header pull-right">
-					<div class="navbar-form">
-						<button id="id_btn_make_request" class="btn btn-primary" onclick="sendFoodRequest()">Make a request</button>
-					</div>
-				</div>
-			</div>
-		</nav>
-
-
-
+		</div>
+		
 	</div>
 </body>
 </html>
