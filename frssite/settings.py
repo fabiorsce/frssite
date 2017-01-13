@@ -113,6 +113,8 @@ MEDIA_ROOT = '/'.join((PROJECT_ROOT,'media/'))
 MEDIA_URL = '/media/'
 
 '''
+
+import netifaces 
 # Find out what the IP addresses are at run time
 # This is necessary because otherwise Gunicorn will reject the connections
 def ip_addresses():
