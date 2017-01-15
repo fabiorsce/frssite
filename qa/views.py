@@ -25,7 +25,7 @@ def random_test(request, number_of_questions=5):
     questions = Question.objects.all()    
     random_array = []
     while len(random_array) < number_of_questions:
-        x = random.randrange(number_of_questions)
+        x = random.randrange(questions_in_db)
         if not x in random_array:
             random_array.append(x)
             test_questions.append(questions[x])
