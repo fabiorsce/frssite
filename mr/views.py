@@ -3,7 +3,7 @@ Created on 24 de nov de 2016
 
 @author: fabio
 '''
-import random
+
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 import json
@@ -11,6 +11,7 @@ from django.contrib import messages
 from .models import Request
 from mr.models import Product, Item
 import datetime
+from django.db.models import Sum
 
 def food_request(request):
     food_requests = Request.objects.filter().order_by('status', '-paid')
@@ -78,3 +79,21 @@ def cancel_food_request(request, food_request_id):
     Item.objects.filter(request_id=int(food_request_id)).delete()
     Request.objects.filter(id=int(food_request_id)).delete()
     return redirect('food_request_cashier_view') 
+
+
+def get_sold_products(request):
+    
+    sold_products = Item.objects.filter(request__status=Request.DONE).aggregate(qtt=Sum('quantity')).values_list('product__title', 'qtt').order_by('request__status', '-request__paid')
+    sold_products = list(sold_products)
+    sold_products.insert(0, ['Product', 'Qtt'])
+    return JsonResponse(sold_products, safe=False)
+    
+
+def sales_tracking(request):
+   
+    sold_products = Item.objects.filter(request__status=Request.DONE).annotate(qtt=Sum('quantity')).values('product__title', 'qtt').order_by('request__status', '-request__paid')
+    
+    #json_sold_products = serializers.serialize("json", sold_products)
+    
+    return render(request, template_name='sales_tracking.html', context={'sold_products':sold_products})
+
