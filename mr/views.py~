@@ -83,7 +83,7 @@ def cancel_food_request(request, food_request_id):
 
 def get_sold_products(request):
     
-    sold_products = Item.objects.filter(request__status=Request.DONE).values_list('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
+    sold_products = Item.objects.filter(request__status=Request.DONE).values('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
     sold_products = list(sold_products)
     sold_products.insert(0, ['Product', 'Qtt'])
     return JsonResponse(sold_products, safe=False)
@@ -91,7 +91,7 @@ def get_sold_products(request):
 
 def sales_tracking(request):
    
-    sold_products = Item.objects.filter(request__status=Request.DONE).annotate(qtt=Sum('quantity')).values('product__title', 'qtt').order_by('request__status', '-request__paid')
+    sold_products = Item.objects.filter(request__status=Request.DONE).values('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
     
     #json_sold_products = serializers.serialize("json", sold_products)
     
