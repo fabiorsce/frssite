@@ -8,10 +8,10 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 import json
 from django.contrib import messages
-from .models import Request
-from mr.models import Product, Item
+from mr.models import Product, Item, Request
 import datetime
 from django.db.models import Sum
+from django.db.models.functions import TruncMonth
 
 def food_request(request):
     food_requests = Request.objects.filter().order_by('status', '-paid')
@@ -87,11 +87,57 @@ def get_sold_products(request):
     sold_products = list(sold_products)
     sold_products.insert(0, ['Product', 'Qtt'])
     return JsonResponse(sold_products, safe=False)
+
+def get_income_by_category(request):
     
+    from django.db import connection
+        
+    sql_str = ''' 
+        SELECT 
+            strftime('%Y-%m', r.paid) as 'month',
+            COALESCE((select sum(i.quantity*p.price) 
+                FROM 
+                    mr_product p 
+                join mr_item i on p.id = i.product_id
+                join mr_request r2 on i.request_id = r2.id 
+                WHERE p.category = 'beverage'
+                    AND strftime('%Y-%m', r.paid) = strftime('%Y-%m', r2.paid)
+            ),0) as 'beverage',
+            COALESCE((select sum(i.quantity*p.price) 
+                FROM 
+                    mr_product p 
+                join mr_item i on p.id = i.product_id
+                join mr_request r2 on i.request_id = r2.id 
+                WHERE p.category = 'dessert'
+                    AND strftime('%Y-%m', r.paid) = strftime('%Y-%m', r2.paid)
+            ),0) as 'dessert',
+            COALESCE((select sum(i.quantity*p.price) 
+                FROM 
+                    mr_product p 
+                join mr_item i on p.id = i.product_id
+                join mr_request r2 on i.request_id = r2.id 
+                WHERE p.category = 'dish'
+                    AND strftime('%Y-%m', r.paid) = strftime('%Y-%m', r2.paid)
+            ),0) as 'dish'
+        FROM
+            mr_request r 
+        WHERE
+            r.paid is not NULL
+        GROUP BY
+            strftime('%Y-%m', r.paid)
+    '''
+    
+    with connection.cursor() as c:
+        c.execute(sql_str)
+        result = c.fetchall()
+    
+    result.insert(0, ['Month', 'Beverage', 'Dessert', 'Dish'])
+        
+    return JsonResponse(result, safe=False)
 
 def sales_tracking(request):
    
-    sold_products = Item.objects.filter(request__status=Request.DONE).annotate(qtt=Sum('quantity')).values('product__title', 'qtt').order_by('request__status', '-request__paid')
+    sold_products = Item.objects.filter(request__status=Request.DONE).values('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
     
     #json_sold_products = serializers.serialize("json", sold_products)
     

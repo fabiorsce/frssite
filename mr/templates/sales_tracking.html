@@ -20,10 +20,9 @@
 		crossorigin="anonymous"></script>
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
     
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
+      google.charts.load('current', {'packages':['corechart','bar']});
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
 
@@ -47,17 +46,81 @@
     	var data = google.visualization.arrayToDataTable(json_sold_products);
 
         var options = {
-          title: 'Sold Products'
+          //title: 'Sold Products'
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        var chart = new google.visualization.PieChart(document.getElementById('id_div_piechart'));
 
         chart.draw(data, options);
+
+        var barchart = new google.visualization.ColumnChart(document.getElementById('id_div_barchart'));
+        barchart.draw(data, options);
+        
+        /* Get the income by category data from an AJAX call */
+        var income_by_category = $.ajax({
+            url: "/mr/get_income_by_category/",
+            dataType: "json",
+            async: false
+            }).responseText;
+    	var json_income_by_category = JSON.parse(income_by_category);
+    	var data_ibc = google.visualization.arrayToDataTable(json_income_by_category);
+    	/*
+        var data2 = google.visualization.arrayToDataTable([
+                                                          ['Month', 'Beverage', 'Dish', 'Desert'],
+                                                          ['2014', 1000, 400, 200],
+                                                          ['2015', 1170, 460, 250],
+                                                          ['2016', 660, 1120, 300],
+                                                          ['2017', 1030, 540, 350]
+                                                        ]);
+    	*/
+
+        var options2 = {
+          chart: {
+            //title: 'Income by category'
+          }
+        };
+        var col_chart = new google.charts.Bar(document.getElementById('id_div_colchart'));
+        col_chart.draw(data_ibc, options2);
+
+      
       }
     </script>
+
+    
   </head>
   <body>
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
+  	<div class="container">
+  		<div class="row">
+  			<div class="col-md-6">
+  				<div class="panel panel-primary">
+  					<div class="panel-heading">Sold Products</div>
+  					<div class="panel-body">
+  						<div id="id_div_piechart"></div>
+  					</div>
+  				</div>
+  			</div>
+  			<div class="col-md-6">
+  			  	<div class="panel panel-primary">
+  					<div class="panel-heading">Sold Products</div>
+  					<div class="panel-body">
+  						<div id="id_div_barchart"></div>
+  					</div>
+  				</div>
+  			</div>
+  		</div>
+  		<div class="row">
+  			<div class="col-md-6">
+  				<div class="panel panel-primary">
+  					<div class="panel-heading">Income by category</div>
+  					<div class="panel-body">
+  						<div id="id_div_colchart"></div>
+  					</div>
+  				</div>
+  			</div>
+  			<div class="col-md-6">
+  			</div>
+  		</div>
+  	</div>
     <ul>
     	{% for sp in sold_products %}
     	<li>{{sp.product__title}} - {{sp.qtt}} </li>

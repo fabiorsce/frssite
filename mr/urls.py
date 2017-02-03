@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^cancel_food_request/(?P<food_request_id>\d+)/$', views.cancel_food_request, name='cancel_food_request'),
     url(r'^sales_tracking/', views.sales_tracking, name='sales_tracking'),
     url(r'^get_sold_products/', views.get_sold_products, name='get_sold_products'),
+    url(r'^get_income_by_category/', views.get_income_by_category, name='get_income_by_category'),
 ]
