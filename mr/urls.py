@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^sales_tracking/', views.sales_tracking, name='sales_tracking'),
     url(r'^get_sold_products/', views.get_sold_products, name='get_sold_products'),
     url(r'^get_income_by_category/', views.get_income_by_category, name='get_income_by_category'),
+    url(r'^get_requests_by_day/', views.get_requests_by_day, name='get_requests_by_day'),
 ]

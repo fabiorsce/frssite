@@ -106,15 +106,15 @@
 							<div class="row">
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="http://cgrtbilling.com" class="image fit" target="_blank"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
+										<a href="{% url 'food_request' %}" class="image fit" target="_blank"><img src="/static/images/food_request.png" alt="" /></a>
 										<header>
-											<h3>CGRTBilling Project</h3>
+											<h3><a href="{% url 'food_request' %}" target="_blank">Food request example</a></h3>
 										</header>
 									</article>
 									<article class="item">
-										<a href="https://suap.ifrn.edu.br/accounts/login/?next=/" class="image fit" target="_blank"><img src="/static/images/suap.jpg" alt="" /></a>
+										<a href="{% url 'sales_tracking' %}" class="image fit" target="_blank"><img src="/static/images/express_food_management.png" alt="" /></a>
 										<header>
-											<h3>SUAP Project</h3>
+											<h3><a href="{% url 'sales_tracking' %}" target="_blank">Food request charts example</a></h3>
 										</header>
 									</article>
 								</div>
@@ -122,27 +122,31 @@
 									<article class="item">
 										<a href="{% url 'random_test' %}" class="image fit" target="_blank"><img src="/static/images/questions.png" alt="" /></a>
 										<header>
-											<h3>Random questions example</h3>
+											<h3><a href="{% url 'random_test' %}" target="_blank">Random questions example</a></h3>
 										</header>
 									</article>
-									<article class="item">
-										<a href="{% url 'food_request' %}" class="image fit" target="_blank"><img src="/static/images/food_request.png" alt="" /></a>
-										<header>
-											<h3>Food request example</h3>
-										</header>
-									</article>
-								</div>
-								<div class="4u$ 12u$(mobile)">
 									<article class="item">
 										<a href="http://www.lightcapturing.com/" class="image fit" target="_blank"><img src="/static/images/light_capturing.png" alt="" /></a>
 										<header>
-											<h3>Light Capturing</h3>
+											<h3><a href="http://www.lightcapturing.com/" target="_blank">Light Capturing</a></h3>
 										</header>
 									</article>
-									
+								</div>
+								<div class="4u 12u$(mobile)">
+									<article class="item">
+										<a href="http://cgrtbilling.com" class="image fit" target="_blank"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
+										<header>
+											<h3><a href="http://cgrtbilling.com" target="_blank">CGRTBilling Project</a></h3>
+										</header>
+									</article>
+									<article class="item">
+										<a href="https://suap.ifrn.edu.br/accounts/login/?next=/" class="image fit" target="_blank"><img src="/static/images/suap.jpg" alt="" /></a>
+										<header>
+											<h3><a href="https://suap.ifrn.edu.br/accounts/login/?next=/" class="image fit" target="_blank">SUAP Project</a></h3>
+										</header>
+									</article>
 								</div>
 							</div>
-
 						</div>
 					</section>
 

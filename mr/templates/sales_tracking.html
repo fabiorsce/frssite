@@ -22,9 +22,11 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     
     <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart','bar']});
+      google.charts.load('current', {'packages':['corechart','bar', 'calendar']});
       google.charts.setOnLoadCallback(drawChart);
       function drawChart() {
+    	  
+    	/*********** Sold Products Charts 1 and 2 *******************/
 
     	var sold_products = $.ajax({
             url: "/mr/get_sold_products",
@@ -32,29 +34,17 @@
             async: false
             }).responseText;
     	json_sold_products = JSON.parse(sold_products);
-    	
-    	/*
-        var data = google.visualization.arrayToDataTable([
-          ['Products', 'Sold Quantity'],
-          ['Work',     11],
-          ['Eat',      2],
-          ['Commute',  2],
-          ['Watch TV', 2],
-          ['Sleep',    7]
-        ]);
-    	*/
     	var data = google.visualization.arrayToDataTable(json_sold_products);
-
         var options = {
-          //title: 'Sold Products'
         };
 
         var chart = new google.visualization.PieChart(document.getElementById('id_div_piechart'));
-
         chart.draw(data, options);
 
         var barchart = new google.visualization.ColumnChart(document.getElementById('id_div_barchart'));
         barchart.draw(data, options);
+        
+        /*********** Income Chart *******************/
         
         /* Get the income by category data from an AJAX call */
         var income_by_category = $.ajax({
@@ -64,16 +54,6 @@
             }).responseText;
     	var json_income_by_category = JSON.parse(income_by_category);
     	var data_ibc = google.visualization.arrayToDataTable(json_income_by_category);
-    	/*
-        var data2 = google.visualization.arrayToDataTable([
-                                                          ['Month', 'Beverage', 'Dish', 'Desert'],
-                                                          ['2014', 1000, 400, 200],
-                                                          ['2015', 1170, 460, 250],
-                                                          ['2016', 660, 1120, 300],
-                                                          ['2017', 1030, 540, 350]
-                                                        ]);
-    	*/
-
         var options2 = {
           chart: {
             //title: 'Income by category'
@@ -81,7 +61,30 @@
         };
         var col_chart = new google.charts.Bar(document.getElementById('id_div_colchart'));
         col_chart.draw(data_ibc, options2);
+        
+		/*********** Attendance Chart *******************/        
 
+        /* Get requests by date from an AJAX call */
+        var requests_by_day = $.ajax({
+            url: "/mr/get_requests_by_day/",
+            dataType: "json",
+            async: false
+            }).responseText;
+    	var json_requests_by_day = JSON.parse(requests_by_day);
+
+        var dataTable4 = new google.visualization.DataTable();
+        dataTable4.addColumn({ type: 'date', id: 'Date' });
+        dataTable4.addColumn({ type: 'number', id: 'Items' });
+        var x = [];
+        for (i=0;i<json_requests_by_day.length;i++) {
+        	x.push([ new Date(json_requests_by_day[i][0]), json_requests_by_day[i][1] ]);
+        }
+        dataTable4.addRows(x);
+        var attendance_chart = new google.visualization.Calendar(document.getElementById('id_div_attendance'));
+        var options4 = {
+          
+        };
+        attendance_chart.draw(dataTable4, options4);
       
       }
     </script>
@@ -90,10 +93,23 @@
   </head>
   <body>
   	<div class="container">
+  		<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
+  			<span class="navbar-text">
+      			Express Food Management
+    		</span>
+		</nav>
+		<div class="row">
+			<div class="col-md-12">
+				<p>These are some charts made with Google Charts, JSON, AJAX and Javascript to monitor your Express Food Truck.</p>
+				<p>Charts 1 and 2 are diferent ways to see the sold products.</p>
+				<p>Chart 3 shows your receipts by category of product.</p>
+				<p>Chart 4 shows the days that you received requests in your Food Truck.</p>
+			</div>
+		</div>
   		<div class="row">
   			<div class="col-md-6">
   				<div class="panel panel-primary">
-  					<div class="panel-heading">Sold Products</div>
+  					<div class="panel-heading">Sold Products - Percentage</div>
   					<div class="panel-body">
   						<div id="id_div_piechart"></div>
   					</div>
@@ -101,7 +117,7 @@
   			</div>
   			<div class="col-md-6">
   			  	<div class="panel panel-primary">
-  					<div class="panel-heading">Sold Products</div>
+  					<div class="panel-heading">Sold Products - Quantity</div>
   					<div class="panel-body">
   						<div id="id_div_barchart"></div>
   					</div>
@@ -118,13 +134,14 @@
   				</div>
   			</div>
   			<div class="col-md-6">
+  				<div class="panel panel-primary">
+  					<div class="panel-heading">Food Truck Attendance</div>
+  					<div class="panel-body">
+  						<div id="id_div_attendance"></div>
+  					</div>
+  				</div>
   			</div>
   		</div>
   	</div>
-    <ul>
-    	{% for sp in sold_products %}
-    	<li>{{sp.product__title}} - {{sp.qtt}} </li>
-    	{% endfor %}
-    </ul>
   </body>
 </html>

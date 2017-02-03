@@ -11,7 +11,7 @@ from django.contrib import messages
 from mr.models import Product, Item, Request
 import datetime
 from django.db.models import Sum
-from django.db.models.functions import TruncMonth
+from django.db import connection
 
 def food_request(request):
     food_requests = Request.objects.filter().order_by('status', '-paid')
@@ -81,6 +81,30 @@ def cancel_food_request(request, food_request_id):
     return redirect('food_request_cashier_view') 
 
 
+def get_requests_by_day(request):
+    
+    sql_str = '''
+            SELECT 
+                strftime('%Y-%m-%d', r.created) as 'created',
+                sum(i.quantity) as 'quantity'
+            FROM
+                mr_request r 
+                    join mr_item i on r.id = i.request_id
+            WHERE
+                r.paid is not NULL
+            GROUP BY
+                strftime('%Y-%m-%d', r.created)
+    '''
+    
+    with connection.cursor() as c:
+        c.execute(sql_str)
+        result = c.fetchall()
+    
+    #result.insert(0, ['Date', 'Quantity'])
+        
+    return JsonResponse(result, safe=False)
+
+
 def get_sold_products(request):
     
     sold_products = Item.objects.filter(request__status=Request.DONE).values_list('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
@@ -90,8 +114,6 @@ def get_sold_products(request):
 
 def get_income_by_category(request):
     
-    from django.db import connection
-        
     sql_str = ''' 
         SELECT 
             strftime('%Y-%m', r.paid) as 'month',
