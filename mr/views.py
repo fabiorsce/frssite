@@ -12,9 +12,11 @@ from mr.models import Product, Item, Request
 import datetime
 from django.db.models import Sum
 from django.db import connection
+from datetime import timedelta, datetime
+from django.db.models import Q
 
 def food_request(request):
-    food_requests = Request.objects.filter().order_by('status', '-paid')
+    food_requests = Request.objects.filter(Q(status__in=(Request.PAID, Request.PREPARING, Request.WAITING)) | Q(status=Request.DONE, paid__gte=datetime.now()-timedelta(days=1) )).order_by('status', '-paid')
     return render(request, template_name='food_request.html', context={'food_requests':food_requests})
 
 def food_request_kitchen_view(request):
