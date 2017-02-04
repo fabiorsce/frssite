@@ -85,7 +85,7 @@ def get_requests_by_day(request):
     
     sql_str = '''
             SELECT 
-                strftime('%Y-%m-%d', r.created) as 'created',
+                strftime('%Y-%m-%d', r.paid) as 'paid',
                 sum(i.quantity) as 'quantity'
             FROM
                 mr_request r 
@@ -93,7 +93,7 @@ def get_requests_by_day(request):
             WHERE
                 r.paid is not NULL
             GROUP BY
-                strftime('%Y-%m-%d', r.created)
+                strftime('%Y-%m-%d', r.paid)
     '''
     
     with connection.cursor() as c:

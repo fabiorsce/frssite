@@ -70,7 +70,7 @@ class Request(models.Model):
             return 'success'
         
         return 'danger'
-
+    
     
 class Item(models.Model):
     product = models.ForeignKey(Product, null=False, blank=False)

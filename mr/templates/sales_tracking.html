@@ -74,7 +74,7 @@
 
         var dataTable4 = new google.visualization.DataTable();
         dataTable4.addColumn({ type: 'date', id: 'Date' });
-        dataTable4.addColumn({ type: 'number', id: 'Items' });
+        dataTable4.addColumn({ type: 'number', id: 'Number of Items' });
         var x = [];
         for (i=0;i<json_requests_by_day.length;i++) {
         	x.push([ new Date(json_requests_by_day[i][0]), json_requests_by_day[i][1] ]);
@@ -82,6 +82,11 @@
         dataTable4.addRows(x);
         var attendance_chart = new google.visualization.Calendar(document.getElementById('id_div_attendance'));
         var options4 = {
+        	'height':400,
+        	'colorAxis': {
+        			minValue: 0,  
+        			colors: ['#98FB98', '#006400'],
+        	}
         };
         attendance_chart.draw(dataTable4, options4);
       
@@ -105,7 +110,7 @@
 				<p>Chart 4 shows the days that you received requests in your Food Truck.</p>
 			</div>
 		</div>
-  		<div class="row">
+		<div class="row">
   			<div class="col-md-6">
   				<div class="panel panel-primary">
   					<div class="panel-heading">Sold Products - Percentage</div>
@@ -124,7 +129,7 @@
   			</div>
   		</div>
   		<div class="row">
-  			<div class="col-md-6">
+  			<div class="col-md-12">
   				<div class="panel panel-primary">
   					<div class="panel-heading">Income by category</div>
   					<div class="panel-body">
@@ -132,7 +137,9 @@
   					</div>
   				</div>
   			</div>
-  			<div class="col-md-6">
+  		</div>
+  		<div class="row">
+  			<div class="col-md-12">
   				<div class="panel panel-primary">
   					<div class="panel-heading">Food Truck Attendance</div>
   					<div class="panel-body">
