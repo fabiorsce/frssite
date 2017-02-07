@@ -9,7 +9,6 @@ from django.http import JsonResponse, HttpResponse
 import json
 from django.contrib import messages
 from mr.models import Product, Item, Request
-import datetime
 from django.db.models import Sum
 from django.db import connection
 from datetime import timedelta, datetime
@@ -73,7 +72,7 @@ def change_to_preparing(request, food_request_id):
 def change_to_paid(request, food_request_id):
     r = Request.objects.get(id=int(food_request_id))
     r.status = Request.PAID
-    r.paid = datetime.datetime.now()
+    r.paid = datetime.now()
     r.save()
     return redirect('food_request_cashier_view') 
 
