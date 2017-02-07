@@ -13,6 +13,7 @@ from django.db.models import Sum
 from django.db import connection
 from datetime import timedelta, datetime
 from django.db.models import Q
+from dateutil.relativedelta import relativedelta
 
 def food_request(request):
     food_requests = Request.objects.filter(Q(status__in=(Request.PAID, Request.PREPARING, Request.WAITING)) | Q(status=Request.DONE, paid__gte=datetime.now()-timedelta(days=1) )).order_by('status', '-paid')
@@ -110,7 +111,7 @@ def get_requests_by_day(request, months=3):
 
 def get_sold_products(request, months=3):
     
-    start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
+    start_date = datetime.utcnow() - relativedelta(months=int(months))
     start_date = start_date.replace(day=1)
     
     sold_products = Item.objects.filter(request__status=Request.DONE, request__paid__gte=start_date).values_list('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
@@ -124,6 +125,10 @@ def get_income_by_category(request, months=3):
     start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
     start_date = start_date.replace(day=1)
     
+    all_dates = [start_date.strftime('%Y-%m')]
+    for i in range(1,int(months)):
+        all_dates.append((start_date + relativedelta(months=i)).strftime('%Y-%m'))
+        
     sql_str = ''' 
         SELECT 
             strftime('%Y-%m', r.paid) as 'month',
@@ -164,7 +169,19 @@ def get_income_by_category(request, months=3):
         c.execute(sql_str)
         result = c.fetchall()
     
+    position = 0
+    for i in all_dates:
+        position = position + 1
+        is_present = False
+        for j in result:
+            if i == j[0]:
+                is_present = True
+        if not is_present:
+            result.insert(position-1, [i, 0, 0, 0])
+        
     result.insert(0, ['Month', 'Beverage', 'Dessert', 'Dish'])
+    
+    print (result)
         
     return JsonResponse(result, safe=False)
 

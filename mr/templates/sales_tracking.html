@@ -80,7 +80,9 @@
         dataTable4.addColumn({ type: 'number', id: 'Number of Items' });
         var x = [];
         for (i=0;i<json_requests_by_day.length;i++) {
-        	x.push([ new Date(json_requests_by_day[i][0]), json_requests_by_day[i][1] ]);
+        	//date_splited = json_requests_by_day[i][0].split("-")
+        	//x.push([ new Date(date_splited[0],date_splited[1], date_splited[2]), json_requests_by_day[i][1] ]);
+        	x.push([ new Date(json_requests_by_day[i][0] + " 12:00:00"), json_requests_by_day[i][1] ]);
         }
         dataTable4.addRows(x);
         var attendance_chart = new google.visualization.Calendar(document.getElementById('id_div_attendance'));
@@ -101,7 +103,7 @@
 			$('#id_sold_products_percentage_heading').html('Sold Products - Percentage - Last ' + $(this).val() + ' months ' )
 			$('#id_sold_products_quantity_heading').html('Sold Products - Quantity - Last ' + $(this).val() + ' months ' )
 			$('#id_income_by_category_heading').html('Income by category - Last ' + $(this).val() + ' months ' )
-			$('#id_attendance_heading').html('Food Truck Attendance - Last ' + $(this).val() + ' months ' )
+			$('#id_attendance_heading').html('Attendance by sold items - Last ' + $(this).val() + ' months ' )
 		    // $(this).val() will work here
 		    drawChart($(this).val());
 		});
@@ -174,7 +176,7 @@
   		<div class="row">
   			<div class="col-md-12">
   				<div class="panel panel-primary">
-  					<div id="id_attendance_heading" class="panel-heading">Food Truck Attendance - Last 3 months</div>
+  					<div id="id_attendance_heading" class="panel-heading">Attendance by sold items - Last 3 months</div>
   					<div class="panel-body">
   						<div id="id_div_attendance"></div>
   					</div>
