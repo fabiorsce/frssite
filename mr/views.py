@@ -82,7 +82,10 @@ def cancel_food_request(request, food_request_id):
     return redirect('food_request_cashier_view') 
 
 
-def get_requests_by_day(request):
+def get_requests_by_day(request, months=3):
+    
+    start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
+    start_date = start_date.replace(day=1)
     
     sql_str = '''
             SELECT 
@@ -93,27 +96,33 @@ def get_requests_by_day(request):
                     join mr_item i on r.id = i.request_id
             WHERE
                 r.paid is not NULL
+                AND r.paid >= datetime('{0}')
             GROUP BY
                 strftime('%Y-%m-%d', r.paid)
-    '''
+    '''.format(start_date.strftime('%Y-%m-%d'))
     
     with connection.cursor() as c:
         c.execute(sql_str)
         result = c.fetchall()
     
-    #result.insert(0, ['Date', 'Quantity'])
-        
     return JsonResponse(result, safe=False)
 
 
-def get_sold_products(request):
+def get_sold_products(request, months=3):
     
-    sold_products = Item.objects.filter(request__status=Request.DONE).values_list('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
+    start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
+    start_date = start_date.replace(day=1)
+    
+    sold_products = Item.objects.filter(request__status=Request.DONE, request__paid__gte=start_date).values_list('product__title').annotate(qtt=Sum('quantity')).order_by('-qtt')
     sold_products = list(sold_products)
     sold_products.insert(0, ['Product', 'Qtt'])
     return JsonResponse(sold_products, safe=False)
 
-def get_income_by_category(request):
+def get_income_by_category(request, months=3):
+    
+    
+    start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
+    start_date = start_date.replace(day=1)
     
     sql_str = ''' 
         SELECT 
@@ -146,9 +155,10 @@ def get_income_by_category(request):
             mr_request r 
         WHERE
             r.paid is not NULL
+        AND r.paid >= datetime('{0}')
         GROUP BY
             strftime('%Y-%m', r.paid)
-    '''
+    '''.format(start_date.strftime('%Y-%m-%d'))
     
     with connection.cursor() as c:
         c.execute(sql_str)

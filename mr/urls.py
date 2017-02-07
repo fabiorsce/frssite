@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^change_to_paid/(?P<food_request_id>\d+)/$', views.change_to_paid, name='change_to_paid'),
     url(r'^cancel_food_request/(?P<food_request_id>\d+)/$', views.cancel_food_request, name='cancel_food_request'),
     url(r'^sales_tracking/', views.sales_tracking, name='sales_tracking'),
-    url(r'^get_sold_products/', views.get_sold_products, name='get_sold_products'),
-    url(r'^get_income_by_category/', views.get_income_by_category, name='get_income_by_category'),
-    url(r'^get_requests_by_day/', views.get_requests_by_day, name='get_requests_by_day'),
+    url(r'^get_sold_products/(?P<months>\d+)/$', views.get_sold_products, name='get_sold_products'),
+    url(r'^get_income_by_category/(?P<months>\d+)/$', views.get_income_by_category, name='get_income_by_category'),
+    url(r'^get_requests_by_day/(?P<months>\d+)/$', views.get_requests_by_day, name='get_requests_by_day'),
 ]
