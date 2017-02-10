@@ -1,6 +1,6 @@
 import unittest
 from django.test import Client
-from mr.models import Request, Item
+from mr.models import Request
 import json
 
 class MakeRequestTest(unittest.TestCase):
@@ -23,12 +23,12 @@ class MakeRequestTest(unittest.TestCase):
         
         response = self.client.get('/mr/food_request/')
         self.assertEqual(response.status_code, 200)
-        
         self.assertEqual(len(response.context['food_requests']), requests_count+1)
         
         
-    def test_make_request(self):
         
+    def test_make_request(self):
+        requests_count = Request.objects.all().count()
         
         data = {}
         data['name']='FabioTest'
@@ -45,12 +45,9 @@ class MakeRequestTest(unittest.TestCase):
         data['items'] = items 
         
         json_data = json.dumps(data)
-        response = self.client.post('/mr/make_request/', json_data,
-                content_type='application/json',
-                HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        response = self.client.post('/mr/add_request/', data=json_data, content_type='application/json', HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        
         response = self.client.get('/mr/food_request/')
         self.assertEqual(response.status_code, 200)
         
-        self.assertEqual(len(response.context['food_requests']), 1)
+        self.assertEqual(len(response.context['food_requests']), requests_count+1)
