@@ -111,7 +111,7 @@ $.ajaxSetup({
 							{{r.total}}
 						</td>
 						<td>{{r.get_status_display}}</td>
-						<td>{% if r.paid %}{{r.paid}}{% endif %}</td>
+						<td>{% if r.paid %}{{ r.paid|date:'Y-m-d H:i' }}{% endif %}</td>
 					</tr>
 					{% endfor %}
 				</tbody>

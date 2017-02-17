@@ -53,9 +53,6 @@ def add_request(request):
                 itemObj.quantity = int(i['quantity'])
                 itemObj.request = reqObj
                 itemObj.save()
-                
-            
-            print (json_data)   
     return HttpResponse("OK")
 
 def change_to_done(request, food_request_id):
