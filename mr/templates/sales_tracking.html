@@ -103,7 +103,7 @@
 			$('#id_sold_products_percentage_heading').html('Sold Products - Percentage - Last ' + $(this).val() + ' months ' )
 			$('#id_sold_products_quantity_heading').html('Sold Products - Quantity - Last ' + $(this).val() + ' months ' )
 			$('#id_income_by_category_heading').html('Income by category - Last ' + $(this).val() + ' months ' )
-			$('#id_attendance_heading').html('Attendance by sold items - Last ' + $(this).val() + ' months ' )
+			$('#id_attendance_heading').html('Daily Income - Last ' + $(this).val() + ' months ' )
 		    // $(this).val() will work here
 		    drawChart($(this).val());
 		});
@@ -123,7 +123,7 @@
 				<p>These are some charts made with Google Charts, JSON, AJAX and Javascript to monitor your Express Food Truck.</p>
 				<p>Charts 1 and 2 are diferent ways to see the sold products.</p>
 				<p>Chart 3 shows your receipts by category of product.</p>
-				<p>Chart 4 shows the days that you received requests in your Food Truck.</p>
+				<p>Chart 4 shows the daily income of your Food Truck.</p>
 			</div>
 		</div>
 		<div class="form-group row">
@@ -176,7 +176,7 @@
   		<div class="row">
   			<div class="col-md-12">
   				<div class="panel panel-primary">
-  					<div id="id_attendance_heading" class="panel-heading">Attendance by sold items - Last 3 months</div>
+  					<div id="id_attendance_heading" class="panel-heading">Daily Income - Last 3 months</div>
   					<div class="panel-body">
   						<div id="id_div_attendance"></div>
   					</div>

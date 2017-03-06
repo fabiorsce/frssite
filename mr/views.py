@@ -88,10 +88,9 @@ def get_requests_by_day(request, months=3):
     sql_str = '''
             SELECT 
                 strftime('%Y-%m-%d', r.paid) as 'paid',
-                sum(i.quantity) as 'quantity'
+                ROUND(sum(r.total), 2) as 'total'
             FROM
                 mr_request r 
-                    join mr_item i on r.id = i.request_id
             WHERE
                 r.paid is not NULL
                 AND r.paid >= datetime('{0}')
