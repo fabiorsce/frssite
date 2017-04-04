@@ -1,0 +1,8 @@
+<h1>Employees</h1>
+<ul>
+{% for employee in object_list %}
+    <li>{{ employee.birth_date|date }} - {{ employee.first_name }}</li>
+{% empty %}
+    <li>No articles yet.</li>
+{% endfor %}
+</ul>
