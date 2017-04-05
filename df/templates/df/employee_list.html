@@ -1,8 +1,77 @@
-<h1>Employees</h1>
-<ul>
-{% for employee in object_list %}
-    <li>{{ employee.birth_date|date }} - {{ employee.first_name }}</li>
-{% empty %}
-    <li>No articles yet.</li>
-{% endfor %}
-</ul>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+
+        <!-- Latest compiled and minified CSS -->
+        <!--
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        -->
+
+        <!-- Optional theme -->
+        <!--
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+        -->
+        <!-- Latest compiled and minified JavaScript -->
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+        <!--
+        <script src="/static/df/js/jquery-1.12.4.js"></script>
+        <script src="/static/df/js/jquery.dataTables.min.js"></script>
+        <script src="/static/df/js/dataTables.bootstrap.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/df/css/dataTables.bootstrap.min">
+        -->
+
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/r-2.1.1/se-1.2.0/datatables.min.css"/>
+ 
+        <script type="text/javascript" src="https://cdn.datatables.net/v/bs-3.3.7/jq-2.2.4/dt-1.10.13/r-2.1.1/se-1.2.0/datatables.min.js"></script>
+
+
+
+        
+        <script type="text/javascript">
+        $(document).ready(function() {
+            $('#id_employee_table').DataTable();
+            $("#id_employee_table_paginate").addClass("pull-right");
+            $("#id_employee_table_filter").addClass("pull-right");
+            $("#id_employee_table_filter").find( "input" ).attr('size',60);
+            $('#id_employee_title').popover();
+        } );
+        </script>
+        <title>Employees</title>
+    </head>
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <a id="id_employee_title" class="btn" href="#" data-content="This is an example using datatables. You can search and sort dynamically using javascript. Hold Ctrl and click on the cell that you want to select. Use Ctrl + C to copy the selected rows." rel="popover" data-placement="right" data-trigger="hover">
+                <h2>Employees Example</h2>
+            </a>
+            
+        </div>
+        <table id="id_employee_table" class="table table-striped table-bordered" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>SSN</th>
+                    <th>Birth Date</th>
+                    <th class="text-right">Salary (US$)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for e in object_list %}
+                    <tr>
+                        <td>{{e.first_name}}</td>
+                        <td>{{e.last_name}}</td>
+                        <td>{{e.ssn}}</td>
+                        <td>{{e.birth_date|date:"Y-m-d"}}</td>
+                        <td class="text-right">{{e.salary}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

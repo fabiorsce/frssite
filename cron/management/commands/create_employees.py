@@ -32,6 +32,8 @@ class Command(BaseCommand):
             new_employee.birth_date = date(1970,1,1) + timedelta(days=random.randint(1,10000))
             new_employee.role = Employee.ROLE_CHOICES[random.randint(0,2)][0]
             new_employee.salary = decimal.Decimal(random.randrange(1000000))/100
+            new_employee.ssn = ssn = '-'.join( (str(random.randint(0,999)).rjust(3,'0'), str(random.randint(0,99)).rjust(2,'0'), str(random.randint(0,9999)).rjust(4,'0')))
+
             new_employee.save()
 
 
