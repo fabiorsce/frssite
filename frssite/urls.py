@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^qa/', include('qa.urls')),
     url(r'^mr/', include('mr.urls')),
+    url(r'^df/', include('df.urls')),
 ]
 
 if settings.DEBUG:
