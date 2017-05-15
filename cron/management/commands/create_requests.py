@@ -45,12 +45,11 @@ class Command(BaseCommand):
                 new_request.paid = datetime.utcnow() + relativedelta(minutes=random.randint(-120,120))
             new_request.save()
              
-            items = random.sample(range(6), k=random.randint(1,6))
+            items = random.sample(range(7), k=random.randint(1,7))
             for j in items:
                 new_item = Item()
                 new_item.request = new_request
                 new_item.product = produts[j]
-                new_item.quantity = random.randint(1,6)
                 new_item.save()
                 
             new_request.total = new_request.getTotalValue()
