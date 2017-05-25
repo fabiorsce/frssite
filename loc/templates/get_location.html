@@ -133,11 +133,22 @@
     <div class="container">
 
         <form>
-            <h2 class="form-signin-heading">Inventory Search</h2>
-            <label for="inputSN" class="sr-only">Serial Number</label>
-            <input type="text" id="id_serial_number" class="form-control" placeholder="Serial Number" required autofocus>
-            <input type="text" id="id_lat">
-            <input type="text" id="id_lng">
+            <h2 class="form-heading">Inventory Search</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <label for="serial_number" class="sr-only">Serial Number</label>
+                        <input type="text" id="id_serial_number" name="serial_number" class="form-control" placeholder="Serial Number" required autofocus>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <input type="text" id="id_lat">
+                    <input type="text" id="id_lng">
+                </div>
+            </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
         </form>
 
