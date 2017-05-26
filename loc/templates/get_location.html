@@ -196,13 +196,20 @@
                             $("#id_material_price").text('Price:' + data.objects[0].price);
                             $("#id_material_location").text('Location:' + data.objects[0].lat + ', ' + data.objects[0].lng);
 
+                            $("#id_material_details").show();
+
                             deleteMarkers();
                             var latLng = new google.maps.LatLng(data.objects[0].lat,data.objects[0].lng);
                             addMarker(latLng, data.objects[0].serial_number + ' - ' + data.objects[0].description);
+
+
+                        } else {
+                            $('#id_messages').html('<div class="alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No material was found</div>');
+                            $("#id_material_details").hide();
                         }
-                        $("#id_material_details").show();
+                        
                     });
-                    $('#id_messages').html('<div class="alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No material was found</div>');
+                    
                     $('#id_messages').show();
                 } else {
                     $('#id_messages').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Please enter a valid serial number</div>');
