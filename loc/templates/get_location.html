@@ -47,9 +47,8 @@
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
-
             $('#id_messages').hide();
-
+            $("#id_material_details").hide();
         });
     </script>
     <script type="text/javascript">
@@ -72,10 +71,89 @@
                     //   1: permission denied
                     //   2: position unavailable (error response from location provider)
                     //   3: timed out
+            };
+
+            navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+        }
+    </script>
+    <script>
+        // Note: This example requires that you consent to location sharing when
+        // prompted by your browser. If you see the error "The Geolocation service
+        // failed.", it means you probably did not give permission for the browser to
+        // locate you.
+        var map, infoWindow;
+        var markers = [];
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+              center: {lat: -34.397, lng: 150.644},
+              zoom: 2
+            });
+            infoWindow = new google.maps.InfoWindow;
+
+            // Try HTML5 geolocation.
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude
                 };
 
-                navigator.geolocation.getCurrentPosition(geoSuccess, geoError, geoOptions);
+                infoWindow.setPosition(pos);
+                infoWindow.setContent('Current location.');
+                infoWindow.open(map);
+                map.setCenter(pos);
+              }, function() {
+                handleLocationError(true, infoWindow, map.getCenter());
+              });
+            } else {
+              // Browser doesn't support Geolocation
+              handleLocationError(false, infoWindow, map.getCenter());
             }
+        }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+        // Adds a marker to the map and push to the array.
+        function addMarker(location, title) {
+          var marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            title: title
+          });
+          markers.push(marker);
+        }
+
+        // Sets the map on all markers in the array.
+        function setMapOnAll(map) {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(map);
+          }
+        }
+
+        // Removes the markers from the map, but keeps them in the array.
+        function clearMarkers() {
+          setMapOnAll(null);
+        }
+
+        // Shows any markers currently in the array.
+        function showMarkers() {
+          setMapOnAll(map);
+        }
+
+        // Deletes all markers in the array by removing references to them.
+        function deleteMarkers() {
+          clearMarkers();
+          markers = [];
+        }
+    </script>
+    <script async defer 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_o2nyMK8Nb999ecrHxdbg0zJI-tbFTqA&callback=initMap">
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -92,6 +170,7 @@
                     valueField: "serial_number",
                     triggerLength: 1,
                     method: "get",
+                    cache: false,
                     loadingClass: "loading-circle",
                     preDispatch: function (query) {
                         return {
@@ -103,54 +182,86 @@
                     }
                 }
             });
+            $('#id_btn_search_serial').click(function(){
+                $('#id_messages').html('');
+                $('#id_messages').hide();
+                if ($("#id_serial_number").val()) {
+                    var url = "/loc/api/v1/material/?serial_number=" + $("#id_serial_number").val() + "&format=json"
+                    $.get(url, function(data, status){
+                        if (data.objects.length > 0) {
+                            $("#id_material_photo").attr("src",data.objects[0].photo);
+                            $("#id_material_photo").attr("alt",data.objects[0].description);
+                            $("#id_material_serial_number").text('Serial Number:' + data.objects[0].serial_number);
+                            $("#id_material_description").text(data.objects[0].description);
+                            $("#id_material_price").text('Price:' + data.objects[0].price);
+                            $("#id_material_location").text('Location:' + data.objects[0].lat + ', ' + data.objects[0].lng);
+
+                            deleteMarkers();
+                            var latLng = new google.maps.LatLng(data.objects[0].lat,data.objects[0].lng);
+                            addMarker(latLng, data.objects[0].serial_number + ' - ' + data.objects[0].description);
+                        }
+                        $("#id_material_details").show();
+                    });
+                    $('#id_messages').html('<div class="alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No material was found</div>');
+                    $('#id_messages').show();
+                } else {
+                    $('#id_messages').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Please enter a valid serial number</div>');
+                    $('#id_messages').show();
+                }
+            });
+
         });
     </script>
+    <style>
+       #map {
+        height: 300px;
+        width: 100%;
+       }
+    </style>
     <title>Inventory</title>
 </head>
 <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Project name</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
     <div class="container">
-
+        <div class="row">
+            <div id="id_messages"></div>
+        </div>
         <form>
             <h2 class="form-heading">Inventory Search</h2>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="input-group">
                         <label for="serial_number" class="sr-only">Serial Number</label>
-                        <input type="text" id="id_serial_number" name="serial_number" class="form-control" placeholder="Serial Number" required autofocus>
+                        <input type="text" id="id_serial_number" name="serial_number" class="form-control" placeholder="Serial Number" autocomplete="off" required autofocus>
                         <span class="input-group-btn">
-                            <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                            <button id="id_btn_search_serial"class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                         </span>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <input type="text" id="id_lat">
-                    <input type="text" id="id_lng">
+                    <input type="hidden" id="id_lat">
+                    <input type="hidden" id="id_lng">
                 </div>
             </div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+            <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>-->
         </form>
+        <div class="row">
+            <div class="col-sm-6 col-md-6">
+                <div id="id_material_details" class="thumbnail">
+                  <img id="id_material_photo" src="" alt="">
+                  <div class="caption">
+                    <h3 id="id_material_description"></h3>
+                    <ul>
+                        <li id="id_material_serial_number"></li>
+                        <li id="id_material_price"></li>
+                        <li id="id_material_location"></li>
+                    </ul>
+                  </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-6">
+                <div id="map"></div>
+            </div>
+        </div>
 
 
     </div><!-- /.container -->
