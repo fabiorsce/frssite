@@ -51,6 +51,7 @@ class Command(BaseCommand):
                 new_item.request = new_request
                 new_item.product = produts[j]
                 new_item.quantity = random.randint(1,10)
+                # test commit
                 new_item.save()
                 
             new_request.total = new_request.getTotalValue()
