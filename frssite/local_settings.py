@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'mr',
     'df',
     'cron',
+    'loc',
 
 )
 
@@ -134,3 +135,5 @@ def ip_addresses():
 
 # Discover our IP address
 ALLOWED_HOSTS = ip_addresses()
+
+TASTYPIE_DEFAULT_FORMATS = ['json', 'xml']

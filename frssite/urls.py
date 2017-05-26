@@ -17,10 +17,18 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
 from . import settings
+from .sitemaps import StaticViewSitemap
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
+
 
 
 admin.autodiscover()
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
+
 
 urlpatterns = [
     url(r'$^', views.index),
@@ -30,6 +38,8 @@ urlpatterns = [
     url(r'^qa/', include('qa.urls')),
     url(r'^mr/', include('mr.urls')),
     url(r'^df/', include('df.urls')),
+    url(r'^loc/', include('loc.urls')),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
