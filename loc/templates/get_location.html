@@ -220,6 +220,24 @@
                 }
             });
 
+            // Update the material location with current location
+            $('#id_btn_update_location').click(function(){
+                var data = JSON.stringify({
+                    "serial": "This will prbbly be my lst post.",
+                    "lat": "2011-05-22T00:46:38",
+                    "lng": "another-post",
+                    "message": 
+                });
+
+                $.ajax({
+                  url: 'http://localhost:8000/api/v1/entry/',
+                  type: 'POST',
+                  contentType: 'application/json',
+                  data: data,
+                  dataType: 'json',
+                  processData: false
+                })
+            });
         });
     </script>
     <style>
@@ -285,14 +303,27 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
-                                <div>Latitude: <span id="id_your_latitude"></span></div>
-                                
-                                
+                                <div class="form-group">
+                                    <label for="id_your_latitude">Latitude:</label>
+                                    <input type="text" class="form-control" id="id_your_latitude">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
-                                <div>Longitude:<span id="id_your_longitude"></span></div>
+                                <div class="form-group">
+                                    <label for="id_your_longitude">Longitude:</label>
+                                    <input type="text" class="form-control" id="id_your_longitude">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="id_comments">Comments:</label>
+                                    <textarea class="form-control" rows="3" cols="30" id="id_comments" name="update_message">Please, I want to inform that the material was found in my location
+                                    </textarea>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
