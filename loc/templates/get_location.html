@@ -48,7 +48,7 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#id_messages').hide();
-            $("#id_material_details").hide();
+            //$("#id_material_details").hide();
         });
     </script>
     <script type="text/javascript">
@@ -60,8 +60,6 @@
 
             var geoSuccess = function(position) {
                 startPos = position;
-                $('#id_lat').val(startPos.coords.latitude);
-                $('#id_lng').val(startPos.coords.longitude);
             };
 
             var geoError = function(error) {
@@ -126,6 +124,8 @@
             map: map,
             title: title
           });
+          map.setCenter(location);
+          map.setZoom(4);
           markers.push(marker);
         }
 
@@ -191,12 +191,12 @@
                         if (data.objects.length > 0) {
                             $("#id_material_photo").attr("src",data.objects[0].photo);
                             $("#id_material_photo").attr("alt",data.objects[0].description);
-                            $("#id_material_serial_number").text('Serial Number:' + data.objects[0].serial_number);
+                            $("#id_material_serial_number").text(data.objects[0].serial_number);
                             $("#id_material_description").text(data.objects[0].description);
-                            $("#id_material_price").text('Price:' + data.objects[0].price);
-                            $("#id_material_location").text('Location:' + data.objects[0].lat + ', ' + data.objects[0].lng);
+                            $("#id_material_price").text(data.objects[0].price);
+                            $("#id_material_location").text(data.objects[0].lat + ', ' + data.objects[0].lng);
 
-                            $("#id_material_details").show();
+                            //$("#id_material_details").show();
 
                             deleteMarkers();
                             var latLng = new google.maps.LatLng(data.objects[0].lat,data.objects[0].lng);
@@ -205,7 +205,7 @@
 
                         } else {
                             $('#id_messages').html('<div class="alert alert-warning alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>No material was found</div>');
-                            $("#id_material_details").hide();
+                            //$("#id_material_details").hide();
                         }
                         
                     });
@@ -221,7 +221,7 @@
     </script>
     <style>
        #map {
-        height: 300px;
+        height: 400px;
         width: 100%;
        }
     </style>
@@ -235,7 +235,7 @@
         <form>
             <h2 class="form-heading">Inventory Search</h2>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-md-6">
                     <div class="input-group">
                         <label for="serial_number" class="sr-only">Serial Number</label>
                         <input type="text" id="id_serial_number" name="serial_number" class="form-control" placeholder="Serial Number" autocomplete="off" required autofocus>
@@ -244,28 +244,33 @@
                         </span>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <input type="hidden" id="id_lat">
-                    <input type="hidden" id="id_lng">
-                </div>
             </div>
             <!--<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>-->
         </form>
         <div class="row">
-            <div class="col-sm-6 col-md-6">
-                <div id="id_material_details" class="thumbnail">
-                  <img id="id_material_photo" src="" alt="">
-                  <div class="caption">
-                    <h3 id="id_material_description"></h3>
-                    <ul>
-                        <li id="id_material_serial_number"></li>
-                        <li id="id_material_price"></li>
-                        <li id="id_material_location"></li>
-                    </ul>
-                  </div>
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <img id="id_material_photo" src="/static/images/unload.png" alt="" style="width: 100%; height: 300px;">
                 </div>
             </div>
-            <div class="col-sm-6 col-md-6">
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    <div class="caption">
+                        <h3 id="id_material_description"></h3>
+                        <ul>
+                            <li>Serial number: <span id="id_material_serial_number"></span></li>
+                            <li>Price: <span id="id_material_price"></span></li>
+                            <li>Location:<span id="id_material_location"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="caption">
+                        <h3>Location</h3>
+                </div>
                 <div id="map"></div>
             </div>
         </div>
