@@ -223,14 +223,16 @@
             // Update the material location with current location
             $('#id_btn_update_location').click(function(){
                 var data = JSON.stringify({
-                    "serial": "This will prbbly be my lst post.",
-                    "lat": "2011-05-22T00:46:38",
-                    "lng": "another-post",
-                    "message": 
+                    "lat": 1,
+                    "lng": 1,
+                    "material": {"id" : 1},
+                    "message": "Please update the latitude and longitude",
+                    "user": {"id" : 1},
+                    "status": {"id" : 1}
                 });
 
                 $.ajax({
-                  url: 'http://localhost:8000/api/v1/entry/',
+                  url: '/loc/api/v1/review/',
                   type: 'POST',
                   contentType: 'application/json',
                   data: data,
@@ -328,7 +330,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
-                                <button type="button" class="btn btn-success">Update with your location</button>
+                                <button id="id_btn_update_location" type="button" class="btn btn-success">Update with your location</button>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,17 @@
+from tastypie import fields
 from tastypie.resources import ModelResource
-from loc.models import Material
+from loc.models import Material, Review
+from django.contrib.auth.models import User
+from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication, MultiAuthentication,SessionAuthentication
+from tastypie.authorization import DjangoAuthorization
+
+
+class UserResource(ModelResource):
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'user'
+        fields = ['username', 'first_name', 'last_name']
+        allowed_methods = ['get', 'post']
 
 
 class FieldSelectionMixin(object):
@@ -52,7 +64,26 @@ class FieldSelectionMixin(object):
 class MaterialResource(FieldSelectionMixin, ModelResource):
     class Meta:
         queryset = Material.objects.all()
-        allowed_methods = ['get']
+        resource_name = 'material'
+        allowed_methods = ['get', 'post']
         filtering = {
             'serial_number': ['exact'],
         }
+
+        #authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
+        authentication = SessionAuthentication()
+        authorization = DjangoAuthorization()
+
+class ReviewResource(FieldSelectionMixin, ModelResource):
+
+    user = fields.ForeignKey(UserResource, 'user')
+    material = fields.ForeignKey(MaterialResource, 'material')
+
+    class Meta:
+        queryset = Review.objects.all()
+        resource_name = 'review'
+        allowed_methods = ['get', 'post']
+
+        authentication = SessionAuthentication()
+        authorization = DjangoAuthorization()
+

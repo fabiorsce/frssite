@@ -5,7 +5,7 @@ Created on 24 de mai de 2017
 '''
 
 from django.contrib import admin
-from .models import Material, Review
+from .models import Material, Review, ReviewStatus
 
 
 @admin.register(Material)
@@ -16,3 +16,7 @@ class MaterialAdmin(admin.ModelAdmin):
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
     list_display=['material', 'user', 'message', 'created', 'status' ]
+
+@admin.register(ReviewStatus)
+class ReviewStatusAdmin(admin.ModelAdmin):
+    list_display=['id', 'description']
