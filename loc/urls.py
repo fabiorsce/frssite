@@ -8,12 +8,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
 from tastypie.api import Api
-from .api.resources import MaterialResource, UserResource, ReviewResource
+from .api.resources import MaterialResource, UserResource, ReviewResource, ReviewStatusResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(UserResource())
 v1_api.register(MaterialResource())
 v1_api.register(ReviewResource())
+v1_api.register(ReviewStatusResource())
 
 urlpatterns = [
     url(r'^get_location/', views.get_location, name='get_location'),

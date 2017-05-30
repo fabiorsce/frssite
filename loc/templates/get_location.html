@@ -96,8 +96,8 @@
                   lng: position.coords.longitude
                 };
 
-                $("#id_your_latitude").text(position.coords.latitude);
-                $("#id_your_longitude").text(position.coords.longitude);
+                $("#id_your_latitude").val(position.coords.latitude);
+                $("#id_your_longitude").val(position.coords.longitude);
 
                 infoWindow.setPosition(pos);
                 infoWindow.setContent('Current location.');
@@ -159,6 +159,16 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_o2nyMK8Nb999ecrHxdbg0zJI-tbFTqA&callback=initMap">
     </script>
     <script type="text/javascript">
+        function checkSerialNumber() {
+            if (! $("#id_serial_number").val()) {
+                $('#id_messages').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Please enter a valid serial number</div>');
+                $('#id_messages').show();
+                return false;
+            } 
+            return true;
+        }
+
+
         $(document).ready(function() {
 
             // Load the serial numbers
@@ -188,10 +198,12 @@
             $('#id_btn_search_serial').click(function(){
                 $('#id_messages').html('');
                 $('#id_messages').hide();
+                $("#id_material_id").val('');
                 if ($("#id_serial_number").val()) {
                     var url = "/loc/api/v1/material/?serial_number=" + $("#id_serial_number").val() + "&format=json"
                     $.get(url, function(data, status){
                         if (data.objects.length > 0) {
+                            $("#id_material_id").val(data.objects[0].id);
                             $("#id_material_photo").attr("src",data.objects[0].photo);
                             $("#id_material_photo").attr("alt",data.objects[0].description);
                             $("#id_material_serial_number").text(data.objects[0].serial_number);
@@ -222,23 +234,47 @@
 
             // Update the material location with current location
             $('#id_btn_update_location').click(function(){
+
+                if (checkSerialNumber()) {
+
+                    var data = JSON.stringify({
+                        "lat": parseFloat($("#id_your_latitude").val()),
+                        "lng": parseFloat($("#id_your_longitude").val()),
+                        "material": "/loc/api/v1/material/" + $("#id_material_id").val() + "/",
+                        "message": $("#id_comment").text(),
+                        "user": "/loc/api/v1/user/" + $("#id_user_id").val() + "/",
+                        "status": "/loc/api/v1/review_status/1/"
+                    });
+
+                    $.ajax({
+                      url: '/loc/api/v1/review/',
+                      type: 'POST',
+                      contentType: 'application/json',
+                      data: data,
+                      dataType: 'json',
+                      processData: true
+                    })
+
+                }
+                
+                
+                
+                /*
                 var data = JSON.stringify({
-                    "lat": 1,
-                    "lng": 1,
-                    "material": {"id" : 1},
-                    "message": "Please update the latitude and longitude",
-                    "user": {"id" : 1},
-                    "status": {"id" : 1}
+                    "description": "teste",
                 });
 
                 $.ajax({
-                  url: '/loc/api/v1/review/',
+                  url: '/loc/api/v1/review_status/',
                   type: 'POST',
                   contentType: 'application/json',
                   data: data,
                   dataType: 'json',
                   processData: false
                 })
+                */
+
+
             });
         });
     </script>
@@ -276,6 +312,9 @@
                     </div>
             </div>
         </div>
+
+        <input type="hidden" id="id_material_id" name="material_id">
+        <input type="hidden" id="id_user_id" name="user_id" value="{{request.user.id}}">
        
         
         <div class="row">

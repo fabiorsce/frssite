@@ -1,17 +1,9 @@
 from tastypie import fields
 from tastypie.resources import ModelResource
-from loc.models import Material, Review
+from loc.models import Material, Review, ReviewStatus
 from django.contrib.auth.models import User
 from tastypie.authentication import BasicAuthentication, ApiKeyAuthentication, MultiAuthentication,SessionAuthentication
-from tastypie.authorization import DjangoAuthorization
-
-
-class UserResource(ModelResource):
-    class Meta:
-        queryset = User.objects.all()
-        resource_name = 'user'
-        fields = ['username', 'first_name', 'last_name']
-        allowed_methods = ['get', 'post']
+from tastypie.authorization import DjangoAuthorization, Authorization
 
 
 class FieldSelectionMixin(object):
@@ -60,12 +52,21 @@ class FieldSelectionMixin(object):
         return bundle
 
 
+class UserResource(FieldSelectionMixin, ModelResource):
+    class Meta:
+        queryset = User.objects.all()
+        resource_name = 'user'
+        fields = ['username', 'first_name', 'last_name']
+        allowed_methods = ['get']
+        filtering = {
+            'username': ['exact'],
+        }
 
 class MaterialResource(FieldSelectionMixin, ModelResource):
     class Meta:
         queryset = Material.objects.all()
         resource_name = 'material'
-        allowed_methods = ['get', 'post']
+        allowed_methods = ['get']
         filtering = {
             'serial_number': ['exact'],
         }
@@ -74,16 +75,28 @@ class MaterialResource(FieldSelectionMixin, ModelResource):
         authentication = SessionAuthentication()
         authorization = DjangoAuthorization()
 
+class ReviewStatusResource(FieldSelectionMixin, ModelResource):
+    class Meta:
+        queryset = ReviewStatus.objects.all()
+        resource_name = 'review_status'
+        allowed_methods = ['get']
+        authentication = SessionAuthentication()
+        authorization = DjangoAuthorization()
+
 class ReviewResource(FieldSelectionMixin, ModelResource):
 
     user = fields.ForeignKey(UserResource, 'user')
     material = fields.ForeignKey(MaterialResource, 'material')
+    status = fields.ForeignKey(ReviewStatusResource, 'status')
 
     class Meta:
         queryset = Review.objects.all()
         resource_name = 'review'
         allowed_methods = ['get', 'post']
 
-        authentication = SessionAuthentication()
+        authentication = MultiAuthentication(BasicAuthentication(), ApiKeyAuthentication(), SessionAuthentication())
+        #authentication = SessionAuthentication()
         authorization = DjangoAuthorization()
+        always_return_data = True
+
 
