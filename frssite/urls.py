@@ -20,7 +20,7 @@ from . import settings
 from .sitemaps import StaticViewSitemap
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-
+from django.contrib.auth import views as auth_views
 
 
 admin.autodiscover()
@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^df/', include('df.urls')),
     url(r'^loc/', include('loc.urls')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    url(r'^accounts/login/$', auth_views.login, name='login'),
 ]
 
 if settings.DEBUG:

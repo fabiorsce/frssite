@@ -61,6 +61,9 @@ class UserResource(FieldSelectionMixin, ModelResource):
         filtering = {
             'username': ['exact'],
         }
+        authentication = SessionAuthentication()
+        authorization = DjangoAuthorization()
+        
 
 class MaterialResource(FieldSelectionMixin, ModelResource):
     class Meta:
@@ -98,5 +101,8 @@ class ReviewResource(FieldSelectionMixin, ModelResource):
         #authentication = SessionAuthentication()
         authorization = DjangoAuthorization()
         always_return_data = True
+
+    def obj_create(self, bundle, **kwargs):
+        return super(ReviewResource, self).obj_create(bundle, user=bundle.request.user)
 
 
