@@ -48,7 +48,6 @@
     <script type="text/javascript">
         $(document).ready(function() {
             $('#id_messages').hide();
-            //$("#id_material_details").hide();
         });
     </script>
     <script type="text/javascript">
@@ -83,7 +82,7 @@
         var markers = [];
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
-              center: {lat: -34.397, lng: 150.644},
+              center: {lat: -3.73822040, lng: -38.5202893},
               zoom: 2
             });
             infoWindow = new google.maps.InfoWindow;
@@ -122,14 +121,28 @@
 
         // Adds a marker to the map and push to the array.
         function addMarker(location, title) {
-          var marker = new google.maps.Marker({
+            var marker = new google.maps.Marker({
             position: location,
             map: map,
-            title: title
-          });
-          map.setCenter(location);
-          map.setZoom(4);
-          markers.push(marker);
+            title: title,
+            draggable:true
+            });
+            map.setCenter(location);
+            map.setZoom(4);
+            markers.push(marker);
+
+            marker.addListener('dragend', function (evt) {
+                $("#id_your_latitude").val(evt.latLng.lat().toFixed(6));
+                $("#id_your_longitude").val(evt.latLng.lng().toFixed(6));
+              //console.log('lat: ' + evt.latLng.lat().toFixed(6) + ' lng: ' + evt.latLng.lng().toFixed(6));
+            });
+
+            /*
+            google.maps.event.addListener(marker, 'dragend', function (evt) {
+              console.log('lat: ' + evt.latLng.lat().toFixed(3) + ' lng: ' + evt.latLng.lng().toFixed(3));
+            });
+            */
+
         }
 
         // Sets the map on all markers in the array.
@@ -154,6 +167,8 @@
           clearMarkers();
           markers = [];
         }
+
+        
     </script>
     <script async defer 
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_o2nyMK8Nb999ecrHxdbg0zJI-tbFTqA&callback=initMap">
@@ -337,7 +352,7 @@
             </div>
             <div class="col-md-4">
                 <div class="panel panel-success">
-                    <div class="panel-heading">Your Location</div>
+                    <div class="panel-heading">New Location</div>
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
@@ -366,7 +381,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
-                                <button id="id_btn_update_location" type="button" class="btn btn-success">Update with your location</button>
+                                <button id="id_btn_update_location" type="button" class="btn btn-success">Send new location</button>
                             </div>
                         </div>
                     </div>

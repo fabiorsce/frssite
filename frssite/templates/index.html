@@ -18,6 +18,31 @@
 		    height:300px;
 		    width:80%;
 		}
+		.portifolio_image {
+			border: 1px solid #ccc !important;
+		    border-top-width: 1px;
+		    border-right-width: 1px;
+		    border-bottom-width: 1px;
+		    border-left-width: 1px;
+		    border-top-style: solid;
+		    border-right-style: solid;
+		    border-bottom-style: solid;
+		    border-left-style: solid;
+		    border-top-color: rgb(204, 204, 204);
+		    border-right-color: rgb(204, 204, 204);
+		    border-bottom-color: rgb(204, 204, 204);
+		    border-left-color: rgb(204, 204, 204);
+		    -moz-border-top-colors: none;
+		    -moz-border-right-colors: none;
+		    -moz-border-bottom-colors: none;
+		    -moz-border-left-colors: none;
+		    border-image-source: none;
+		    border-image-slice: 100% 100% 100% 100%;
+		    border-image-width: 1 1 1 1;
+		    border-image-outset: 0 0 0 0;
+		    border-image-repeat: stretch stretch;
+			
+		}
 		</style>
 	</head>
 	<body>
@@ -107,13 +132,15 @@
 							<div class="row">
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="{% url 'food_request' %}" class="image fit" target="_blank"><img src="/static/images/food_request.png" alt="" /></a>
+										<a href="{% url 'food_request' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/food_request.png" alt="" /></a>
 										<header>
 											<h3><a href="{% url 'food_request' %}" target="_blank">Food request example</a></h3>
 										</header>
 									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="{% url 'sales_tracking' %}" class="image fit" target="_blank"><img src="/static/images/express_food_management.png" alt="" /></a>
+										<a href="{% url 'sales_tracking' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/express_food_management.png" alt="" /></a>
 										<header>
 											<h3><a href="{% url 'sales_tracking' %}" target="_blank">Food request charts example</a></h3>
 										</header>
@@ -121,13 +148,15 @@
 								</div>
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="{% url 'random_test' %}" class="image fit" target="_blank"><img src="/static/images/questions.png" alt="" /></a>
+										<a href="{% url 'random_test' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/questions.png" alt="" /></a>
 										<header>
 											<h3><a href="{% url 'random_test' %}" target="_blank">Random questions example</a></h3>
 										</header>
 									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="{% url 'employee-list' %}" class="image fit" target="_blank"><img src="/static/images/employees.png" alt="" /></a>
+										<a href="{% url 'employee-list' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/employees.png" alt="" /></a>
 										<header>
 											<h3><a href="{% url 'employee-list' %}" target="_blank">Employees example</a></h3>
 										</header>
@@ -135,15 +164,33 @@
 								</div>
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="http://cgrtbilling.com" class="image fit" target="_blank"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
+										<a href="http://cgrtbilling.com" class="image fit portifolio_image" target="_blank"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
 										<header>
 											<h3><a href="http://cgrtbilling.com" target="_blank">CGRTBilling Project</a></h3>
 										</header>
 									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="http://www.lightcapturing.com/" class="image fit" target="_blank"><img src="/static/images/light_capturing.png" alt="" /></a>
+										<a href="http://www.lightcapturing.com/" class="image fit portifolio_image" target="_blank"><img src="/static/images/light_capturing.png" alt="" /></a>
 										<header>
 											<h3><a href="http://www.lightcapturing.com/" target="_blank">Light Capturing</a></h3>
+										</header>
+									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
+									<article class="item">
+										<a href="{% url 'random_test' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/inventory_location.png" alt="" /></a>
+										<header>
+											<h3><a href="{% url 'get_location' %}" target="_blank">Inventory location example</a></h3>
+										</header>
+									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
+									<article class="item">
+										<a href="{% url 'employee-list' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/inventory_review.png" alt="" /></a>
+										<header>
+											<h3><a href="{% url 'admin:loc_review_changelist' %}" target="_blank">Inventory review</a></h3>
 										</header>
 									</article>
 								</div>

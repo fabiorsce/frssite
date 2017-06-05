@@ -3,19 +3,16 @@
 {% block content %}
 
 {% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{{form.errors}}
+    <div class="alert alert-error">Your username and password didn't match. Please try again. {{form.errors}}</div>
 {% endif %}
 
 {% if next %}
     {% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
+    <div class="alert alert-error">Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</div>
     {% endif %}
 {% endif %}
-
+<div class="alert alert-info">Please login using username <strong>demo</strong> and password <strong>demo</strong></div>
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <div class="row">
@@ -31,8 +28,10 @@
         </div>
     </div>
     <div class="row">
-        <input class="btn btn-primary" type="submit" value="login" />
-        <input type="hidden" name="next" value="/loc/get_location/" />
+        <div class="form-group col-md-4">
+            <input class="btn btn-primary" type="submit" value="login" />
+            <input type="hidden" name="next" value="/loc/get_location/" />
+        </div>
     </div>
 </form>
 {% endblock %}
