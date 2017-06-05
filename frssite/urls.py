@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'$^', views.index),
     url(r'^index/', views.index),
     url(r'^home/', views.index),
+    url(r'^admin/login/', auth_views.login, kwargs={"template_name":"admin/inv_login.html"}, name='login'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^qa/', include('qa.urls')),
     url(r'^mr/', include('mr.urls')),
@@ -41,6 +42,7 @@ urlpatterns = [
     url(r'^loc/', include('loc.urls')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^accounts/login/$', auth_views.login, name='login'),
+
 ]
 
 if settings.DEBUG:
