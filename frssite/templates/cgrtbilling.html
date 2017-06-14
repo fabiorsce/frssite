@@ -1,0 +1,7 @@
+CgrtBilling is a billing system of VoIP usage. It works integrated with at least 3 other big systems via JSON APIs and CgrtBilling has its own API to receive and provide information to other systems. CgrtBilling has many functionalities and it manages a big amount of data. There is a table that grows more than one million rows each month.
+For the first year I've been working alone with the founder of the company. After, the system grew up a lot and I invited a friend to help me in the development.
+The main highlights that I consider during this project:
+- Performance improvements. There was a routine of one of the legacy systems that spent 9 minutes to run. The same routine was implemented in CgrtBilling and, after apply some knowledge of data structures, the time has been reduced to less than one minute.
+- Master-Slave Postgres Replication and, in some cases, Master-Master Replication.
+- Dynamic filters screen. A screen where is possible to add filters dinamically, apply those filters to a set of objects. After apply the filter, run an action on selected objects. Take a look at dynamic filter image to have an idea of how it works.
+- Long running tasks. Long run tasks are problematic in web applications. The user certainlly will receive an timeout error if a task need 20 or 30 minutes to complete. In CgrtBilling, there are some tasks that need much time to run, then the user makes a request and a task is created. He can monitor the status of his tasks while they are running.
