@@ -51,6 +51,14 @@
 		    background-color: #323635;
 		    background-image: none;
 		}
+		.text-justify {
+			text-align: justify;
+		}
+
+		.three p {
+			margin-bottom: 1em;
+		}
+
 		</style>
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -148,9 +156,9 @@
 							<div class="row">
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="http://cgrtbilling.com" class="image fit portifolio_image" target="_blank" alt="cgrtbilling"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
+										<a href="/cgrtbilling/" class="image fit portifolio_image" target="_blank" alt="cgrtbilling"><img src="/static/images/cgrtbilling.jpg" alt="" /></a>
 										<header>
-											<h3><a href="http://cgrtbilling.com" target="_blank">CGRTBilling Project</a></h3>
+											<h3><a href="/cgrtbilling/" target="_blank">CGRTBilling Project</a></h3>
 										</header>
 									</article>
 								</div>
@@ -177,7 +185,6 @@
 										<a href="{% url 'food_request' %}" class="image fit portifolio_image" target="_blank" alt="food request app"><img src="/static/images/food_request.png" alt="" /></a>
 										<header>
 											<h3><a href="{% url 'food_request' %}" target="_blank">Food Request</a></h3>
-											<p>A simple system to manage food requests. It can be used by a food truck or a small express fast food.</p>
 										</header>
 
 									</article>
@@ -229,23 +236,18 @@
 								<h2>About Me</h2>
 							</header>
 
-							<a href="#" class="image featured"><img class="img_about_me" src="/static/images/about_me.jpg" alt="" /></a>
+							<!--<a href="#" class="image featured"><img class="img_about_me" src="/static/images/about_me.jpg" alt="" /></a>-->
 
-							<p>My name is Fabio Ribeiro Santiago and technology is my passion.</p>
-							<p>I've worked with various technologies along my career, since Clipper on DOS, passing through Powerbuilder, Delphi, and ASP on many Windows versions, some Java and PHP web applications
-							and finally developing some basic apps for android. 
+							<p class="text-justify">My name is Fabio Ribeiro Santiago and technology is my passion.</p>
+							<p class="text-justify">I've worked with various technologies along my career, since Clipper on DOS, Powerbuilder and Delphi with SQL Server, firsts ASP versions, Java and PHP web applications with MySQL and PostgreSQL databases
+							and finally developing some basic apps for Android using SQLite. 
 							</p>
-							<p>
-							Currently, I work part time as Oracle certified DBA at TRE/CE, 
-							a tribunal in Brazil that coordenates the elections of Ceará state. I work as full stack
-							developer in freelancer projects, frequently using some technologies like Bootstrap, HTML, CSS, Javascript, Jquery, JSON, Django, 
-							Python, Celery, Nginx, Postgres and Linux.
+							<p class="text-justify">Currently, I work part time as Oracle certified DBA at TRE/CE, a tribunal in Brazil that coordenates the elections of Ceará state. I work as full stack	developer in freelancer projects, frequently using some technologies like Bootstrap, HTML, CSS, Javascript, Jquery, JSON, Django, Python, Celery, Nginx, Postgres and Linux.
 							</p> 
-							<p>This site was built using some of these technologies except for Celery and Postgres because I wanted to save memory (and my money). 
-							I am paying for a server with only 512MB of RAM and 1 core. I choose to work with python/django because of productivity.</p>
-							<p>I am looking for an oportunity to work outside Brazil. The violence in my city is the principal reason and I would like my kids 
-							grow in a safe place. It would be great if they could learn english too.</p>
-							<p>Feel free to contact me and ask for a price for your project. :-)</p>
+							<p class="text-justify">This site has been built using some of those technologies except for Celery and Postgres because I wanted to save memory (and my money). 
+							I am paying for a server with only 512MB of RAM and 1 core. I choose to work with Python and Django because they are productive.</p>
+							<p class="text-justify">I am looking for an oportunity to work abroad. The US, New Zealand, Australia and Canada are my favourites because I would like to live in a country which english is spoken. I would like my kids could learn english through immersion.</p>
+							<p class="text-justify">Feel free to contact me and ask for a price for your project.</p>
 						</div>
 					</section>
 
@@ -257,7 +259,7 @@
 								<h2>Contact</h2>
 							</header>
 							<div class="text-left">
-							<a href="mailto:fabiors_ce@yahoo.com.br">fabiors_ce@yahoo.com.br </a>
+								<a href="mailto:fabiors_ce@yahoo.com.br">fabiors_ce@yahoo.com.br</a>
 							</div>
 							<div class="bottom">
 								<!-- Social Icons -->

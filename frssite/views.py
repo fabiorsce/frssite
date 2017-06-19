@@ -8,3 +8,6 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, 'index.html')
+
+def cgrtbilling(request):
+    return render(request, 'cgrtbilling.html')

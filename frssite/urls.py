@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'$^', views.index),
     url(r'^index/', views.index),
     url(r'^home/', views.index),
+    url(r'^cgrtbilling/', views.cgrtbilling),
     url(r'^admin/login/', auth_views.login, kwargs={"template_name":"admin/inv_login.html"}, name='login'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^qa/', include('qa.urls')),

@@ -1,7 +1,267 @@
-CgrtBilling is a billing system of VoIP usage. It works integrated with at least 3 other big systems via JSON APIs and CgrtBilling has its own API to receive and provide information to other systems. CgrtBilling has many functionalities and it manages a big amount of data. There is a table that grows more than one million rows each month.
-For the first year I've been working alone with the founder of the company. After, the system grew up a lot and I invited a friend to help me in the development.
-The main highlights that I consider during this project:
-- Performance improvements. There was a routine of one of the legacy systems that spent 9 minutes to run. The same routine was implemented in CgrtBilling and, after apply some knowledge of data structures, the time has been reduced to less than one minute.
-- Master-Slave Postgres Replication and, in some cases, Master-Master Replication.
-- Dynamic filters screen. A screen where is possible to add filters dinamically, apply those filters to a set of objects. After apply the filter, run an action on selected objects. Take a look at dynamic filter image to have an idea of how it works.
-- Long running tasks. Long run tasks are problematic in web applications. The user certainlly will receive an timeout error if a task need 20 or 30 minutes to complete. In CgrtBilling, there are some tasks that need much time to run, then the user makes a request and a task is created. He can monitor the status of his tasks while they are running.
+{% extends "base.html" %}
+
+{% block extrahead %}
+<script src="/static/ekko-lightbox/ekko-lightbox.min.js"></script>
+<link rel="stylesheet" href="/static/ekko-lightbox/ekko-lightbox.min.css">
+<style type="text/css">
+    .carousel-caption h3 {
+        font-family:    Garamond;
+        font-size:      3em;
+        color:          brown;
+    }
+
+    .ekko-lightbox-nav-overlay a {
+        color: gray;
+    }
+
+</style>
+<script type="text/javascript">
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    })
+</script>
+{% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+<div class="jumbotron">
+  <a href="http://cgrtbilling.com/" target="_blank" ><h1 class="text-center">CgrtBilling</h1></a>
+</div>
+</div>
+<div class="row">
+<p>
+CgrtBilling (Carrier Grade Real Time Billing) is a billing system that charges for VoIP usage. CgrtBilling works integrated with at least 3 other big systems via JSON APIs and it has its own API to exchange information with others systems. CgrtBilling has many functionalities and it manages big amount of data. For example, there is a table that grows more than one million rows each month. For more details about the product, please check <a href="http://cgrtbilling.com/">CgrtBilling.</a></p>
+<p>I have been working in CgrtBilling for two and a half year. During the first year, I've been working alone with the founder of the company. After, the system grew up a lot and I invited a friend to help me. All the work have been done remote using <a href="http://www.assembla.com">Assembla</a> to manage the use cases and SVN to control the versions.</p>
+</div>
+<div class="row">
+    <h2>Highlights</h2>
+    <p>The main highlights that I consider during this project were:</p>
+</div>
+<div class="row">
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Performance improvements.</strong> There was a routine of one of the legacy systems that spent 9 minutes to run. The same routine was reimplemented in CgrtBilling and, after applying some knowledge of data structures, the time has been reduced to less than one minute to run.</li>
+        <li class="list-group-item"><strong>Replication.</strong> Master-Slave Postgres Replication and, in some cases, Master-Master Replication.</li>
+        <li class="list-group-item"><strong>Dynamic filters screen.</strong> A screen where is possible to add filters dinamically, apply those filters to a set of objects. After apply the filter, run an action on selected objects. Take a look at dynamic filter screenshot and it will give an idea of how it works.</li>
+        <li class="list-group-item"><strong>Long running tasks.</strong> Long run tasks are problematic in web applications. The user definitely will receive an timeout error if a task need 20 or 30 minutes to complete. In CgrtBilling, there are some tasks that need much time to run, then the user makes a request and a task is created and scheduled in a queue to run. He can monitor the status of his tasks while they are running.</li>
+        <li class="list-group-item"><strong>Payment methods.</strong> The client can buy pre paid and pos paid plans using credit card and paypal as payment methods.</li>
+    </ul>
+</div>
+
+<!--
+<div class="row">
+    <h2>Screenshots</h2>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/system_status.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/system_status.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>System Status</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/dynamic_filters_01.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/dynamic_filters_01.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>Dynamic Filters</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/tariff_plans.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/tariff_plans.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>Tariff Plans</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/many_to_many.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/many_to_many.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>Many to many relationship</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/cron_tasks_01.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/cron_tasks_01.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>Long running tasks 01</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/cron_tasks_02.png" class="image fit portifolio_image" target="_blank" alt="sales tracking"><img src="/static/images/cgrtbilling/cron_tasks_02.png" alt="" /></a>
+            <div class="caption text-center">
+                <h4>Long running tasks 02</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+-->
+
+<!-- Carousel example -->
+
+<!--
+<h2>Screenshots</h2>
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+      <li data-target="#myCarousel" data-slide-to="3"></li>
+      <li data-target="#myCarousel" data-slide-to="4"></li>
+      <li data-target="#myCarousel" data-slide-to="5"></li>
+    </ol>
+
+    <div class="carousel-inner" role="listbox">
+
+      <div class="item active">
+        <a href="/static/images/cgrtbilling/system_status.png" target="_blank"><img src="/static/images/cgrtbilling/system_status.png" alt="System Status"></a>
+        <div class="carousel-caption">
+            <h3>System Status</h3>
+        </div>
+      </div>
+
+      <div class="item">
+        <a href="/static/images/cgrtbilling/dynamic_filters_01.png" target="_blank">
+            <img src="/static/images/cgrtbilling/dynamic_filters_01.png" alt="Dynamic Filter">
+        </a>
+        <div class="carousel-caption">
+            <h3>Dynamic Filter</h3>
+        </div>
+      </div>
+    
+      <div class="item">
+        <a href="/static/images/cgrtbilling/tariff_plans.png" target="_blank">
+            <img src="/static/images/cgrtbilling/tariff_plans.png" alt="New York">
+        </a>
+        <div class="carousel-caption">
+            <h3>Tariff Plans</h3>
+        </div>
+      </div>
+
+      <div class="item">
+        <a href="/static/images/cgrtbilling/many_to_many.png" target="_blank">
+            <img src="/static/images/cgrtbilling/many_to_many.png" alt="Chicago">
+        </a>
+        <div class="carousel-caption">
+            <h3>Many to many relationship</h3>
+        </div>
+      </div>
+    
+      <div class="item">
+        <a href="/static/images/cgrtbilling/cron_tasks_01.png" target="_blank">
+            <img src="/static/images/cgrtbilling/cron_tasks_01.png" alt="New York">
+        </a>
+        <div class="carousel-caption">
+            <h3>Long running tasks 1</h3>
+        </div>
+      </div>
+
+      <div class="item">
+        <a href="/static/images/cgrtbilling/cron_tasks_02.png" target="_blank">
+            <img src="/static/images/cgrtbilling/cron_tasks_02.png" alt="New York">
+        </a>
+        <div class="carousel-caption">
+            <h3>Long running tasks 2</h3>
+        </div>
+      </div>
+  
+    </div>
+
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+      <span class="sr-only">Next</span>
+    </a>
+  </div>
+  <br>
+  <br>
+  <br>
+-->
+
+
+
+<!-- Ekko Lightbox -->
+<div class="row">
+    <h2>Screenshots</h2>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/system_status.png" class="image fit portifolio_image" alt="system status" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="System Status">
+                <img src="/static/images/cgrtbilling/system_status.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>System Status</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/dynamic_filters_01.png" class="image fit portifolio_image" alt="dynamic filters" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Dynamic Filters"> 
+                <img src="/static/images/cgrtbilling/dynamic_filters_01.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Dynamic Filters</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/tariff_plans.png" class="image fit portifolio_image" alt="tariff plans" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Tariff Plans">
+                <img src="/static/images/cgrtbilling/tariff_plans.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Tariff Plans</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/many_to_many.png" class="image fit portifolio_image" alt="many to many" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Many to many">
+                <img src="/static/images/cgrtbilling/many_to_many.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Many to many relationship</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/cron_tasks_01.png" class="image fit portifolio_image" alt="long running tasks 1" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Long Running Tasks 01">
+                <img src="/static/images/cgrtbilling/cron_tasks_01.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Long running tasks 01</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/cgrtbilling/cron_tasks_02.png" class="image fit portifolio_image" alt="long running tasks 2" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Long running tasks 02">
+                <img src="/static/images/cgrtbilling/cron_tasks_02.png" alt="" class="img-responsive" />
+            </a>
+            <div class="caption text-center">
+                <h4>Long running tasks 02</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
