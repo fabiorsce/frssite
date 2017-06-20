@@ -12,6 +12,16 @@
   		<meta name="keywords" content="Python,Django,Web,Development,Postgres,Oracle,HTML,CSS,XML,JavaScript,Freelancer,AJAX,JSON">
   		<meta name="author" content="Fabio Santiago">
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+		<script src="/static/js/jquery-3.1.1.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
 		<link rel="stylesheet" href="/static/assets/css/main.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
@@ -55,7 +65,7 @@
 			text-align: justify;
 		}
 
-		.three p {
+		.three,.two p {
 			margin-bottom: 1em;
 		}
 
@@ -151,7 +161,9 @@
 								<h2>Portfolio</h2>
 							</header>
 
-							<p>I like the idea of free software, but all the projects that I've worked were privates, so I decided to create this page to present my portfolio.</p>
+							<p class="text-justify">I like the idea of free software, but all the projects that I've worked were privates, so I decided to create this page to present my portfolio.</p>
+							<p class="text-justify">The most recent projects were CgrtBilling and Light Capturing. The others are examples where I can show how to use some technology. In example pages you will see a button like <a id="id_btn_how_it_works" class="btn btn-warning btn-xs"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                    		</a>. It will show an how it works window.</p>
 
 							<div class="row">
 								<div class="4u 12u$(mobile)">
@@ -166,7 +178,7 @@
 									<article class="item">
 										<a href="http://www.lightcapturing.com/" class="image fit portifolio_image" target="_blank" alt="lightcapturing"><img src="/static/images/light_capturing.png" alt="" /></a>
 										<header>
-											<h3><a href="http://www.lightcapturing.com/" target="_blank">Light Capturing</a></h3>
+											<h3><a href="http://www.lightcapturing.com/" target="_blank">Light Capturing project</a></h3>
 										</header>
 									</article>
 								</div>
@@ -182,9 +194,17 @@
 							<div class="row">
 								<div class="4u 12u$(mobile)">
 									<article class="item">
+										<a href="{% url 'admin:loc_review_changelist' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/inventory_review.png" alt="inventory review" /></a>
+										<header>
+											<h3><a href="{% url 'admin:loc_review_changelist' %}" target="_blank">Inventory review example </a></h3>
+										</header>
+									</article>
+								</div>
+								<div class="4u 12u$(mobile)">
+									<article class="item">
 										<a href="{% url 'food_request' %}" class="image fit portifolio_image" target="_blank" alt="food request app"><img src="/static/images/food_request.png" alt="" /></a>
 										<header>
-											<h3><a href="{% url 'food_request' %}" target="_blank">Food Request</a></h3>
+											<h3><a href="{% url 'food_request' %}" target="_blank">Food Request example</a></h3>
 										</header>
 
 									</article>
@@ -197,22 +217,14 @@
 										</header>
 									</article>
 								</div>
-								<div class="4u 12u$(mobile)">
-									<article class="item">
-										<a href="{% url 'employee-list' %}" class="image fit portifolio_image" target="_blank" alt="employees example app"><img src="/static/images/employees.png" alt="" /></a>
-										<header>
-											<h3><a href="{% url 'employee-list' %}" target="_blank">Employees example</a></h3>
-										</header>
-									</article>
-								</div>
 								
 							</div>
 							<div class="row">
 								<div class="4u 12u$(mobile)">
 									<article class="item">
-										<a href="{% url 'admin:loc_review_changelist' %}" class="image fit portifolio_image" target="_blank"><img src="/static/images/inventory_review.png" alt="inventory review" /></a>
+										<a href="{% url 'employee-list' %}" class="image fit portifolio_image" target="_blank" alt="employees example app"><img src="/static/images/employees.png" alt="" /></a>
 										<header>
-											<h3><a href="{% url 'admin:loc_review_changelist' %}" target="_blank">Inventory review</a></h3>
+											<h3><a href="{% url 'employee-list' %}" target="_blank">Employees example</a></h3>
 										</header>
 									</article>
 								</div>
@@ -258,7 +270,7 @@
 							<header>
 								<h2>Contact</h2>
 							</header>
-							<div class="text-left">
+							<div class="text-center">
 								<a href="mailto:fabiors_ce@yahoo.com.br">fabiors_ce@yahoo.com.br</a>
 							</div>
 							<div class="bottom">
