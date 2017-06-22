@@ -58,6 +58,10 @@ $.ajaxSetup({
 </script>
 <script type="text/javascript">
 	$(document).ready(function() {
+
+		$("#id_btn_how_it_works").click(function(){
+		    $("#id_modal_how_it_works").modal();
+		});
 		
 		$('#id_messages').hide();
 		$('#id_score').hide();
@@ -128,6 +132,7 @@ $.ajaxSetup({
 </head>
 <body>
 	<div class="container">
+		<!--
 		<div class="row">
 			<div class="page-header">
 				<h2>Random test example</h2>
@@ -135,6 +140,18 @@ $.ajaxSetup({
 				<p>The user will answer the questions and do a JSON request. The request is received and a JSON response is sent. The asnwers are compared and the CSS is changed.</p>
 			</div>
 		</div>
+		-->
+
+		<div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                    <h2>Random test example <a id="id_btn_how_it_works" class="btn btn-warning btn-sm" data-toggle="modal" href="#how_it_works"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                    </a>
+                    </h2>
+                </div>
+            </div>
+        </div>
+
 		{% if messages %}
 		<div class="row">
 		    {% for message in messages %}
@@ -181,10 +198,32 @@ $.ajaxSetup({
 		<div id="id_score" class="row">
 			<span id="id_score_span"></span>
 			<div class="progress">
-			  <div id="id_progress_bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="5">
-			</div>
+			  	<div id="id_progress_bar" class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="2" aria-valuemin="0" aria-valuemax="5"></div>
+			</div>		
 		</div>
-		</div>
+
+
+		<!-- Modal -->
+		<div class="modal fade" id="id_modal_how_it_works" role="dialog">
+		    <div class="modal-dialog">
+		    
+		      <!-- Modal content-->
+		      <div class="modal-content">
+		        <div class="modal-header">
+		          <button type="button" class="close" data-dismiss="modal">&times;</button>
+		          <h4 class="text-center">How it works</h4>
+		        </div>
+		        <div class="modal-body">
+		            <p class="text-justify" style="text-indent: 50px;">A simple example of an application of one page that uses Django, SQLite, Bootstrap, AJAX, JSON, Jquery.</p>
+		            <p class="text-justify" style="text-indent: 50px;">The user will answer the questions and do a JSON request. The request is received and a JSON response is sent. The asnwers are compared and the CSS is changed.</p>
+		        </div>
+		      </div>
+		      
+		    </div>
+		</div> 
+
+
+
 	</div>
 	</div>
 </body>
