@@ -23,11 +23,14 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__fi
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+#SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+SITE_ID = 1
 
 
 # Application definition
@@ -39,14 +42,15 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_tables2',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+    'tastypie',
     'frssite',
     'qa',
     'mr',
-    'df',
     'cron',
+    'df',
     'loc',
-
 )
 
 MIDDLEWARE_CLASSES = (
@@ -135,5 +139,3 @@ def ip_addresses():
 
 # Discover our IP address
 ALLOWED_HOSTS = ip_addresses()
-
-TASTYPIE_DEFAULT_FORMATS = ['json', 'xml']

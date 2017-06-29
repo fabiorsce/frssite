@@ -123,17 +123,38 @@
 		    // $(this).val() will work here
 		    drawChart($(this).val());
 		});
+
+    $("#id_btn_how_it_works").click(function(){
+        $("#id_modal_how_it_works").modal();
+    });
+
+
 	});
 	</script>
     
   </head>
   <body>
   	<div class="container">
+
+      <!--
   		<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary">
   			<span class="navbar-text">
       			Express Food Management
     		</span>
-		</nav>
+		  </nav>
+      -->
+
+      <div class="row">
+              <div class="col-md-12">
+                  <div class="page-header">
+                      <h2>Express Food Management <a id="id_btn_how_it_works" class="btn btn-warning btn-sm" data-toggle="modal" href="#how_it_works"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                      </a>
+                      </h2>
+                  </div>
+              </div>
+      </div>
+
+    <!--
 		<div class="row">
 			<div class="col-md-12">
 				<p>These are some charts made with Google Charts, JSON, AJAX and Javascript to monitor your Express Food Truck.</p>
@@ -142,6 +163,9 @@
 				<p>Chart 4 shows the daily income of your Food Truck.</p>
 			</div>
 		</div>
+    -->
+
+
 		<div class="form-group row">
   			<label for="id_months" class="col-md-3 col-form-label">Select the number of last months</label>
 			<div class="col-md-9">
@@ -199,6 +223,32 @@
   				</div>
   			</div>
   		</div>
+
+
+      <!-- Modal -->
+      <div class="modal fade" id="id_modal_how_it_works" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="text-center">How it works</h4>
+              </div>
+              <div class="modal-body">
+                  <p class="text-justify" style="text-indent: 50px;">These are some charts made with Google Charts, JSON, AJAX and Javascript to monitor your Express Food Truck.</p>
+                  <p class="text-justify" style="text-indent: 50px;">Charts 1 and 2 are diferent ways to see the sold products.</p>
+                  <p class="text-justify" style="text-indent: 50px;">Chart 3 shows your receipts by category of product.</p>
+                  <p class="text-justify" style="text-indent: 50px;">Chart 4 shows the daily income of your Food Truck.</p>
+              </div>
+            </div>
+            
+          </div>
+      </div> 
+
+
+
+
   	</div>
   </body>
 </html>
