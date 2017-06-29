@@ -28,7 +28,8 @@
 		</div>
 	</div>
 	<div id="id_requests" class="row">
-		<table class="table">
+		
+		<table class="table table-responsive">
 			<thead>
 				<tr>
 					<th>Name</th>
@@ -37,7 +38,7 @@
 					<th>Status</th>
 					<th>Date</th>
 					<th>Action</th>
-				<tr>
+				</tr>
 			</thead>
 			<tbody>
 				{% for r in food_requests %}
@@ -75,6 +76,7 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		
 	</div>		
 	{% block modal %}
         {{ block.super }}
