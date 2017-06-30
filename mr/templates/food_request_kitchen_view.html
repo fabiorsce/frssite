@@ -45,11 +45,11 @@
 				<tr class="{{r.getStatusStyle}}">
 					<td>{{r.name}}</td>
 					<td>
-						<p>
 						{% for i in r.item_set.all %}
+                            <p>
 							{{i.product.title}} <span class="badge"> {{ i.quantity }}</span>
+                            </p>
 						{% endfor %}
-						</p>
 					</td>
 					<td>
 						{{r.total}}
