@@ -153,6 +153,25 @@
             marker.addListener('dragend', function (evt) {
                 $("#id_your_latitude").val(evt.latLng.lat().toFixed(6));
                 $("#id_your_longitude").val(evt.latLng.lng().toFixed(6));
+
+                // Update the address
+                var latlng = {lat: evt.latLng.lat(), lng: evt.latLng.lng()};
+                var geocoder = new google.maps.Geocoder;
+                geocoder.geocode({'location': latlng}, function(results, status) {
+                    console.log(results);    
+                    if (status === 'OK') {
+                        if (results[0]) {
+                            $("#id_address").text(results[0].formatted_address);
+                        } else {
+                            window.alert('No results found');
+                        }
+                    } else {
+                        window.alert('Geocoder failed due to: ' + status);
+                    }
+                });
+
+
+
               //console.log('lat: ' + evt.latLng.lat().toFixed(6) + ' lng: ' + evt.latLng.lng().toFixed(6));
             });
 
@@ -244,7 +263,7 @@
                             $("#id_material_description").text(data.objects[0].description);
                             $("#id_material_price").text(data.objects[0].price);
                             $("#id_material_location").text(data.objects[0].lat + ', ' + data.objects[0].lng);
-
+                            $("#id_material_address").text(data.objects[0].address);
                             //$("#id_material_details").show();
 
                             deleteMarkers();
@@ -275,6 +294,7 @@
                         "lat": parseFloat($("#id_your_latitude").val()).toFixed(6),
                         "lng": parseFloat($("#id_your_longitude").val()).toFixed(6),
                         "material": "/loc/api/v1/material/" + $("#id_material_id").val() + "/",
+                        "address": $("#id_address").val(),
                         "message": $("#id_comment").val(),
                         "user": "/loc/api/v1/user/2/",
                         "status": "/loc/api/v1/review_status/1/"
@@ -294,6 +314,7 @@
                         console.log(msg);
                         $('#id_messages').html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Your request was sent successfully.</div>');
                         $('#id_messages').show();
+                        $('#id_messages').focus();
                     });
                     // If Ajax request fails
                     response_data.fail(function( jqXHR, textStatus ) {
@@ -302,6 +323,7 @@
                         console.log(textStatus);
                         $('#id_messages').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + textStatus + '</div>');
                         $('#id_messages').show();
+                        $('#id_messages').focus();
                     });    
 
                 }
@@ -370,7 +392,8 @@
                                 <ul>
                                     <li>Serial number: <span id="id_material_serial_number"></span></li>
                                     <li>Price: <span id="id_material_price"></span></li>
-                                    <li>Location:<span id="id_material_location"></span></li>
+                                    <li>Location: <span id="id_material_location"></span></li>
+                                    <li>Address: <span id="id_material_address"></span></li>
                                 </ul>
                             </div>
                         </div>
@@ -394,6 +417,15 @@
                                 <div class="form-group">
                                     <label for="id_your_longitude">Longitude:</label>
                                     <input type="text" class="form-control" id="id_your_longitude">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="id_address">Address:</label>
+                                    <textarea class="form-control" rows="3" cols="30" id="id_address" name="address">
+                                    </textarea>
                                 </div>
                             </div>
                         </div>
