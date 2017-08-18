@@ -314,7 +314,6 @@
                         console.log(msg);
                         $('#id_messages').html('<div class="alert alert-success alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Your request was sent successfully.</div>');
                         $('#id_messages').show();
-                        $('#id_messages').focus();
                     });
                     // If Ajax request fails
                     response_data.fail(function( jqXHR, textStatus ) {
@@ -323,10 +322,10 @@
                         console.log(textStatus);
                         $('#id_messages').html('<div class="alert alert-danger alert-dismissible" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + textStatus + '</div>');
                         $('#id_messages').show();
-                        $('#id_messages').focus();
-                    });    
+                    }); 
 
                 }
+                $('#id_messages').focus();
  
             });
         });
@@ -346,7 +345,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div id="id_messages"></div>
+            <div id="id_messages" tabindex="-1"></div>
         </div>
         <div class="row">
             <div class="col-md-12">
