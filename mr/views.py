@@ -15,34 +15,35 @@ from datetime import timedelta, datetime
 from django.db.models import Q
 from dateutil.relativedelta import relativedelta
 
+
 def food_request(request):
     food_requests = Request.objects.filter(Q(status__in=(Request.PAID, Request.PREPARING, Request.WAITING)) | Q(status=Request.DONE, paid__gte=datetime.now()-timedelta(days=1) )).order_by('status', '-paid')
-    return render(request, template_name='food_request.html', context={'food_requests':food_requests})
+    return render(request, template_name='food_request.html', context={'food_requests': food_requests})
+
 
 def food_request_kitchen_view(request):
     food_requests = Request.objects.filter(status__in=(Request.PAID,Request.PREPARING)).order_by('status', '-paid')
     return render(request, template_name='food_request_kitchen_view.html', context={'food_requests':food_requests})
+
 
 def food_request_cashier_view(request):
     food_requests = Request.objects.filter(status__in=(Request.WAITING, Request.PAID)).order_by('status', '-paid')
     return render(request, template_name='food_request_cashier_view.html', context={'food_requests':food_requests})
 
 
-
 def make_request(request):
     dishes = Product.objects.filter(category=Product.DISH)
     beverages = Product.objects.filter(category=Product.BEVERAGE)
-    desserts =  Product.objects.filter(category=Product.DESSERT)
-    
+    desserts = Product.objects.filter(category=Product.DESSERT)
     products = Product.objects.all()
-    
     return render(request, template_name='make_request.html', context=locals())
+
 
 def add_request(request):
     if request.is_ajax():
         if request.method == 'POST':
             json_data = json.loads(request.body.decode("utf-8"))
-            reqObj=Request()
+            reqObj = Request()
             reqObj.name = json_data['name']
             reqObj.status = Request.WAITING
             reqObj.total = json_data['total']
@@ -55,24 +56,30 @@ def add_request(request):
                 itemObj.save()
     return HttpResponse("OK")
 
+
 def change_to_done(request, food_request_id):
     r = Request.objects.get(id=int(food_request_id))
     r.status = Request.DONE
     r.save()
-    return redirect('food_request_kitchen_view') 
- 
+    return redirect('food_request_kitchen_view')
+
+
 def change_to_preparing(request, food_request_id):
+
     r = Request.objects.get(id=int(food_request_id))
     r.status = Request.PREPARING
     r.save()
-    return redirect('food_request_kitchen_view') 
+    return redirect('food_request_kitchen_view')
+
 
 def change_to_paid(request, food_request_id):
+
     r = Request.objects.get(id=int(food_request_id))
     r.status = Request.PAID
     r.paid = datetime.now()
     r.save()
-    return redirect('food_request_cashier_view') 
+    return redirect('food_request_cashier_view')
+
 
 def cancel_food_request(request, food_request_id):
     Item.objects.filter(request_id=int(food_request_id)).delete()
@@ -81,10 +88,8 @@ def cancel_food_request(request, food_request_id):
 
 
 def get_requests_by_day(request, months=3):
-    
     start_date = datetime.utcnow() - timedelta(days=(int(months)-1) * 365/12)
     start_date = start_date.replace(day=1)
-    
     sql_str = '''
             SELECT 
                 strftime('%Y-%m-%d', r.paid) as 'paid',
@@ -97,11 +102,9 @@ def get_requests_by_day(request, months=3):
             GROUP BY
                 strftime('%Y-%m-%d', r.paid)
     '''.format(start_date.strftime('%Y-%m-%d'))
-    
     with connection.cursor() as c:
         c.execute(sql_str)
         result = c.fetchall()
-    
     return JsonResponse(result, safe=False)
 
 

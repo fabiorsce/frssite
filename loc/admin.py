@@ -16,6 +16,7 @@ def accept_new_location(modeladmin, request, queryset):
     for r in queryset:
         r.material.lat = r.lat
         r.material.lng = r.lng
+        r.material.address = r.address
         r.material.save()
         r.status = objClosedStatus
         r.save()
@@ -30,12 +31,12 @@ ingnore_review.short_description = "Ignore review"
 
 @admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display=['serial_number', 'description', 'photo', 'price', 'lat', 'lng' ]
+    list_display=['serial_number', 'description', 'photo', 'price', 'lat', 'lng', 'address' ]
     
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display=['material', 'user', 'message', 'lat', 'lng', 'created', 'status' ]
+    list_display=['material', 'user', 'message', 'lat', 'lng', 'address', 'created', 'status' ]
     actions = [accept_new_location, ingnore_review]
     list_filter = ('status', 'user')
     ordering = ('status','-created',)
