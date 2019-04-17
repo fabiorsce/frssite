@@ -1,19 +1,5 @@
-"""frssite URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.8/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Add an import:  from blog import urls as blog_urls
-    2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
-"""
-from django.conf.urls import include, url
+from django.urls import path
+from django.conf.urls import include
 from django.contrib import admin
 from . import views
 from . import settings
@@ -31,18 +17,20 @@ sitemaps = {
 
 
 urlpatterns = [
-    url(r'$^', views.index),
-    url(r'^index/', views.index),
-    url(r'^home/', views.index),
-    url(r'^cgrtbilling/', views.cgrtbilling),
-    url(r'^admin/login/', auth_views.login, kwargs={"template_name":"admin/inv_login.html"}, name='login'),
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^qa/', include('qa.urls')),
-    url(r'^mr/', include('mr.urls')),
-    url(r'^df/', include('df.urls')),
-    url(r'^loc/', include('loc.urls')),
-    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^accounts/login/$', auth_views.login, name='login'),
+    path('', views.index),
+    path('index/', views.index),
+    path('home/', views.index),
+    path('cgrtbilling/', views.cgrtbilling, name='cgrtbilling'),
+    path('estatbio/', views.estatbio, name='estatbio'),
+    path('admin/login/', auth_views.LoginView.as_view(), kwargs={"template_name":"admin/inv_login.html"}, name='login'),
+    path('admin/', admin.site.urls),
+    path('qa/', include('qa.urls')),
+    path('mr/', include('mr.urls')),
+    path('df/', include('df.urls')),
+    path('loc/', include('loc.urls')),
+    path('cron/', include('cron.urls')),
+    path('sitemap\.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('accounts/login/', auth_views.LoginView.as_view(), name='login'),
 
 ]
 

@@ -1,0 +1,125 @@
+{% load static %}
+<script>
+jQuery(function ($) {
+    $('.carousel').carousel();
+    var caption = $('div.item:nth-child(1) .carousel-caption');
+    $('.new-caption-area').html(caption.html());
+    caption.css('display', 'none');
+
+    $(".carousel").on('slide.bs.carousel', function (evt) {
+        var caption = $('div.item:nth-child(' + ($(evt.relatedTarget).index() + 1) + ') .carousel-caption');
+        $('.new-caption-area').html(caption.html());
+        caption.css('display', 'none');
+    });
+});
+</script>
+
+<style>
+    .bs-example {
+        /*width: 600px;*/
+        margin: auto;
+        color: #000;
+    }
+  
+    .new-caption-area {
+        /*width: 600px;*/
+        margin: auto;
+        color: #000;
+        margin-left: 60px;
+    }
+  
+    .carousel-caption {
+        color: #000;
+    }
+    
+    .carousel-indicators li {
+        background-color: #337ab7;
+        border: 1px solid #337ab7;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="bs-example">
+            <div id="carousel-example-captions" class="carousel slide" data-ride="carousel">
+              <ol class="carousel-indicators">
+                <li data-target="#carousel-example-captions" data-slide-to="0" class="active"></li>
+                <li data-target="#carousel-example-captions" data-slide-to="1" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="2" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="3" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="4" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="5" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="6" class=""></li>
+                <li data-target="#carousel-example-captions" data-slide-to="7" class=""></li>
+              </ol>
+              <div class="carousel-inner">
+                <div class="item active">
+                  <a href="{% url 'estatbio' %}" target="_blank"><img src="{% static 'images/projects/estatbio.png' %}" alt="Estatbio"></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'estatbio' %}" target="_blank">Estatbio project</a></h3>
+                    <p>Python, Django, Oracle ETL, JSON, Jquery, Bootstrap, Google Maps API</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="{% url 'cgrtbilling' %}" target="_blank"><img src="{% static 'images/projects/cgrtbilling.png' %}" alt="CgrtBilling"></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'cgrtbilling' %}" target="_blank">CgrtBilling project</a></h3>
+                    <p>Python, Django, Postgres, Bootstrap, Third API integrations, Celery, Redis</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="http://www.lightcapturing.com/" target="_blank"><img src="{% static 'images/projects/light_capturing.png' %}" alt="LightCapturing"></a>
+                  <div class="carousel-caption">
+                    <h3><a href="http://www.lightcapturing.com/" target="_blank">LightCapturing project</a></h3>
+                    <p>Django CMS, JQuery, CSS</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="{% url 'get_location' %}" target="_blank"><img src="/static/images/inventory_location.png" alt="Inventory example" /></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'get_location' %}">Inventory example</a></h3>
+                    <p>Python, Django, SQLite, JQuery, Google Maps API</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="{% url 'food_request' %}" target="_blank" alt="food request app"><img src="/static/images/food_request.png" alt="" /></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'food_request' %}" target="_blank">Food Request example</a></h3>
+                    <p>Python, Django, SQLite, JQuery, Google Maps API</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="{% url 'sales_tracking' %}" target="_blank" alt="sales tracking"><img src="/static/images/express_food_management.png" alt="" /></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'sales_tracking' %}" target="_blank">Food Request Charts example</a></h3>
+                    <p>Python, Django, SQLite, JQuery, Google Charts</p>
+                  </div>
+                </div>
+                <div class="item">
+                 <a href="{% url 'employee-list' %}"  target="_blank" alt="employees example app"><img src="/static/images/employees.png" alt="" /></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'employee-list' %}" target="_blank">Employees example</a></h3>
+                    <p>Python, Django, Datatables</p>
+                  </div>
+                </div>
+                <div class="item">
+                  <a href="{% url 'random_test' %}"  target="_blank" alt="questions example app"><img src="/static/images/questions.png" alt="" /></a>
+                  <div class="carousel-caption">
+                    <h3><a href="{% url 'random_test' %}" target="_blank">Random Questions example</a></h3>
+                    <p>Python, Django, SQLite, JQuery</p>
+                  </div>
+                </div>
+              </div>
+              <a class="left carousel-control" href="#carousel-example-captions" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+              </a>
+              <a class="right carousel-control" href="#carousel-example-captions" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+              </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="new-caption-area text-left"></div>
+    </div>
+</div>

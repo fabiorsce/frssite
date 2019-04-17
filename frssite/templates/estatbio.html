@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+<script src="/static/ekko-lightbox/ekko-lightbox.min.js"></script>
+<link rel="stylesheet" href="/static/ekko-lightbox/ekko-lightbox.min.css">
+<style type="text/css">
+    .carousel-caption h3 {
+        font-family:    Garamond;
+        font-size:      3em;
+        color:          brown;
+    }
+
+    .ekko-lightbox-nav-overlay a {
+        color: gray;
+    }
+
+</style>
+
+<script type="text/javascript">
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+        event.preventDefault();
+        $(this).ekkoLightbox();
+    })
+</script>
+
+{% endblock %}
+
+
+
+{% block content %}
+<div class="row">
+<div class="jumbotron">
+  <a href="#"><h1 class="text-center">EstatBio</h1></a>
+</div>
+</div>
+<div class="row">
+<p>In Brazil, there are 27 States and one TRE (Electoral Regional Tribunal) for each State. Each TRE is responsable for biometric gathering of its citzens.</p>
+<p>
+EstatBio (Biometric Statistics) is a management system to monitor biometric gathering of citizens which reside in Ceara state. Biometric collections is a huge project to improve the security of Brazilian Elections and it is expected to finish in 2020.
+</p>
+<p>
+Basically, EstatBio extracts summarized information from two huge Oracle databases and saves them in a small SQLite database and in JSON files. The ETL process occurs every dawn and once it is finished, Estatbio does not use Oracle production databases until the next update. 
+</p>
+</div>
+<div class="row">
+    <h2>Highlights</h2>
+</div>
+<div class="row">
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Performance.</strong> The ETL process takes about 3 hours to finish, but once the summarized information is available, the system does not access production database anymore.</li>
+        <li class="list-group-item"><strong>Integrity.</strong> In the past, all the information was in Spreadsheets and sometimes each manager had a different information. Now, the information is centralized, available for all the managers and there is an option to download data to spreadsheets also.</li>
+        <li class="list-group-item"><strong>Visualization.</strong> The information is integrated with Google Maps API and Google charts API.</li>
+        <li class="list-group-item"><strong>Summarized information.</strong> Estatbio is a software to help decision making, thus, it contains only the necessary information to make decisions.</li>
+    </ul>
+</div>
+
+<div class="row">
+    <h2>Challenges</h2>
+</div>
+<div class="row">
+    <ul class="list-group">
+        <li class="list-group-item"><strong>ETL.</strong> The ETL process could not run in during office hours and there was not a development database.</li>
+        <li class="list-group-item"><strong>Distributed information and security policies.</strong> The ETL process had performance problems because the way that information is available and to respect security policies.</li>
+        <li class="list-group-item"><strong>Managers opinion divergence.</strong> Managers have divergent option and sometimes is not easy to develop a system that satisfy all the parts.</li>
+    </ul>
+</div>
+
+<!-- Ekko Lightbox -->
+<div class="row">
+    <h2>Screenshots</h2>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_03.png" class="image fit portifolio_image" alt="system status" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="State situation">
+                <img src="/static/images/estatbio/estatbio_03.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>State Situation</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_04.png" class="image fit portifolio_image" alt="dynamic filters" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Cities List"> 
+                <img src="/static/images/estatbio/estatbio_04.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Cities List</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_05.png" class="image fit portifolio_image" alt="tariff plans" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Biometry in Places of Voting">
+                <img src="/static/images/estatbio/estatbio_05.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Biometry in Places of Voting</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_06.png" class="image fit portifolio_image" alt="system status" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="City situation">
+                <img src="/static/images/estatbio/estatbio_06.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>City Situation</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_07.png" class="image fit portifolio_image" alt="dynamic filters" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="City data"> 
+                <img src="/static/images/estatbio/estatbio_07.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>City data</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_08.png" class="image fit portifolio_image" alt="tariff plans" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="City biometric goals and projections">
+                <img src="/static/images/estatbio/estatbio_08.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>City biometric goals and projections</h4>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <a href="/static/images/estatbio/estatbio_09.png" class="image fit portifolio_image" alt="system status" data-toggle="lightbox" data-gallery="screenshot-gallery" class="col-sm-4" data-title="Admin Screen">
+                <img src="/static/images/estatbio/estatbio_09.png" alt="" class="img-responsive"/>
+            </a>
+            <div class="caption text-center">
+                <h4>Admin Screen</h4>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

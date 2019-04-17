@@ -24,12 +24,12 @@ class ReviewStatus(models.Model):
 
 class Review(models.Model):
 
-    user = models.ForeignKey(User, null=False)
-    material = models.ForeignKey(Material, null=False)
+    user = models.ForeignKey(User, null=False,on_delete=models.CASCADE)
+    material = models.ForeignKey(Material, null=False,on_delete=models.CASCADE)
     message = models.CharField(max_length=200, null=False, blank=False)
     created = models.DateTimeField(null=False, blank=False, auto_now_add=True)
     lat = models.DecimalField(_('Latitude'), max_digits=10, decimal_places=8)
     lng = models.DecimalField(_('Longitude'), max_digits=10, decimal_places=8)
     address = models.CharField(max_length=500, null=True, blank=True)
-    status = models.ForeignKey(ReviewStatus, null=False)
+    status = models.ForeignKey(ReviewStatus, null=False,on_delete=models.CASCADE)
 

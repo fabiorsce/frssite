@@ -17,6 +17,11 @@
 		href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
 		crossorigin="anonymous">
+  <style type="text/css">
+    .day_tooltip {
+      width: 160px;
+    }
+  </style>
 	<!-- Latest compiled and minified JavaScript -->
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
@@ -42,6 +47,10 @@
     </script>
     
     <script type="text/javascript">
+
+      function number_to_currency(n, currency) {
+        return currency + " " + n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+      }
       
       function drawChart(months) {
     	  
@@ -94,16 +103,31 @@
         var dataTable4 = new google.visualization.DataTable();
         dataTable4.addColumn({ type: 'date', id: 'Date' });
         dataTable4.addColumn({ type: 'number', id: 'Number of Items' });
+        dataTable4.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
         var x = [];
+
+        let date_options = {  
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
+        };
         for (i=0;i<json_requests_by_day.length;i++) {
         	//date_splited = json_requests_by_day[i][0].split("-")
         	//x.push([ new Date(date_splited[0],date_splited[1], date_splited[2]), json_requests_by_day[i][1] ]);
-        	x.push([ new Date(json_requests_by_day[i][0] + " 12:00:00"), json_requests_by_day[i][1] ]);
+        	x.push([ new Date(json_requests_by_day[i][0] + " 12:00:00"), 
+                    json_requests_by_day[i][1],
+                    '<div class="day_tooltip">' +
+                        new Date(json_requests_by_day[i][0] + " 12:00:00").toLocaleString('en-us', date_options) + ': ' +
+                        number_to_currency(json_requests_by_day[i][1], 'US$') +
+                    '</div>'
+
+                ]);
         }
         dataTable4.addRows(x);
         var attendance_chart = new google.visualization.Calendar(document.getElementById('id_div_attendance'));
         var options4 = {
         	'height':400,
+          'tooltip': {isHtml: true},
         	'colorAxis': {
         			minValue: 0,  
         			colors: ['#98FB98', '#006400'],

@@ -73,9 +73,9 @@ class Request(models.Model):
     
     
 class Item(models.Model):
-    product = models.ForeignKey(Product, null=False, blank=False)
+    product = models.ForeignKey(Product, null=False, blank=False,on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False)
-    request = models.ForeignKey(Request, null=False, blank=False)
+    request = models.ForeignKey(Request, null=False, blank=False,on_delete=models.CASCADE)
     
     def __str__(self):
         return self.product.text

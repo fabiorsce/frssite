@@ -11,3 +11,6 @@ def index(request):
 
 def cgrtbilling(request):
     return render(request, 'cgrtbilling.html')
+
+def estatbio(request):
+    return render(request, 'estatbio.html')

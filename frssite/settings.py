@@ -16,8 +16,9 @@ import netifaces
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
+#PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir))
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -28,34 +29,44 @@ SECRET_KEY = 'd!p+$$ojf6r58&8+&!y7qza&qa375671!v#vk-)8$+n1z_mbsy'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
+SITE_ID = 1
 
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+    'tastypie',
     'frssite',
     'qa',
     'mr',
     'cron',
-)
+    'df',
+    'loc',
+]
 
-MIDDLEWARE_CLASSES = (
+
+
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
-)
+    #'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+]
 
 ROOT_URLCONF = 'frssite.urls'
 
@@ -106,13 +117,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+#STATIC_URL = '/static/'
 
-STATIC_ROOT = '/'.join((PROJECT_ROOT,'static/'))
+#STATIC_ROOT = '/'.join((PROJECT_ROOT,'static/'))
 
-MEDIA_ROOT = '/'.join((PROJECT_ROOT,'media/'))
+#MEDIA_ROOT = '/'.join((PROJECT_ROOT,'media/'))
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 
 MEDIA_URL = '/media/'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.9/howto/static-files/
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+
+#STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
@@ -128,7 +152,10 @@ def ip_addresses():
     ip_list.append('www.fabiors.com')
     ip_list.append('fabiors.com')
     ip_list.append('localhost')
+    ip_list.append('.herokuapp.com')
     return ip_list
 
 # Discover our IP address
 ALLOWED_HOSTS = ip_addresses()
+#ALLOWED_HOSTS=['*']
+

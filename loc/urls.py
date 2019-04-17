@@ -6,9 +6,9 @@ Created on 24 de nov de 2016
 
 from django.conf.urls import include, url
 from django.contrib import admin
-from . import views
+from loc import views
 from tastypie.api import Api
-from .api.resources import MaterialResource, UserResource, ReviewResource, ReviewStatusResource
+from loc.api.resources import MaterialResource, UserResource, ReviewResource, ReviewStatusResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(UserResource())

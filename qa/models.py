@@ -13,7 +13,7 @@ class Question(models.Model):
         return self.text
     
 class Alternative(models.Model):
-    question = models.ForeignKey(Question)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     text = models.CharField(max_length=200)
     is_answer = models.BooleanField(default=False)
     
@@ -22,8 +22,8 @@ class Test(models.Model):
     questions = models.ManyToManyField(Question, through='TestQuestion', through_fields=('test', 'question'),)
 
 class TestQuestion(models.Model):
-    test = models.ForeignKey(Test)
-    question = models.ForeignKey(Question)
+    test = models.ForeignKey(Test,on_delete=models.CASCADE)
+    question = models.ForeignKey(Question,on_delete=models.CASCADE)
     
     class Meta:
         unique_together = ('test', 'question')
